@@ -83,7 +83,7 @@ h1{color:white;font-size:1.6rem;margin:10px 0 8px;text-shadow:2px 2px 4px rgba(0
 }
 .tab-btn.active{background:white;color:#764ba2;}
 .card{
-  background:rgba(255,255,255,0.97);border-radius:22px;padding:24px 22px;width:100%;max-width:600px;
+  background:rgba(255,255,255,0.97);border-radius:22px;padding:26px 24px;width:100%;max-width:780px;
   box-shadow:0 16px 48px rgba(0,0,0,0.15);text-align:center;
   -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
 }
@@ -221,8 +221,8 @@ h1{color:white;font-size:1.6rem;margin:10px 0 8px;text-shadow:2px 2px 4px rgba(0
 }
 
 /* 폴더 */
-.manage-layout{display:-webkit-flex;display:flex;gap:14px;text-align:left;}
-.folder-panel{width:180px;-webkit-flex-shrink:0;flex-shrink:0;}
+.manage-layout{display:-webkit-flex;display:flex;gap:18px;text-align:left;}
+.folder-panel{width:260px;-webkit-flex-shrink:0;flex-shrink:0;}
 .word-panel{-webkit-flex:1;flex:1;min-width:0;}
 .folder-list{margin-bottom:10px;max-height:260px;overflow-y:auto;-webkit-overflow-scrolling:touch;}
 .folder-item{
@@ -233,7 +233,7 @@ h1{color:white;font-size:1.6rem;margin:10px 0 8px;text-shadow:2px 2px 4px rgba(0
 .folder-item.active{background:#667eea;color:white;}
 .folder-item.active .folder-count{color:rgba(255,255,255,0.7);}
 .folder-item.active .btn-folder-del{color:rgba(255,255,255,0.7);}
-.folder-name{font-weight:600;font-size:0.88rem;-webkit-flex:1;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.folder-name{font-weight:600;font-size:0.95rem;-webkit-flex:1;flex:1;white-space:normal;word-break:break-word;line-height:1.3;}
 .folder-count{font-size:0.78rem;color:#aaa;margin-left:4px;}
 .btn-folder-del{background:none;border:none;color:#ccc;cursor:pointer;font-size:1rem;padding:4px 6px;min-width:28px;min-height:28px;}
 .btn-folder-action{background:none;border:none;color:#bbb;cursor:pointer;font-size:0.85rem;padding:2px 5px;min-width:24px;min-height:24px;display:inline-flex;-webkit-align-items:center;align-items:center;-webkit-justify-content:center;justify-content:center;border-radius:6px;}
@@ -281,8 +281,8 @@ h1{color:white;font-size:1.6rem;margin:10px 0 8px;text-shadow:2px 2px 4px rgba(0
 .word-list{max-height:280px;overflow-y:auto;-webkit-overflow-scrolling:touch;}
 .word-item{display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;padding:9px 10px;border-bottom:1px solid #f0f0f0;gap:6px;}
 .word-text{-webkit-flex:1;flex:1;}
-.word-text strong{color:#333;font-size:0.95rem;}
-.word-text .def{color:#888;font-size:0.82rem;}
+.word-text strong{color:#333;font-size:1.1rem;}
+.word-text .def{color:#555;font-size:0.95rem;line-height:1.4;margin-top:2px;}
 .speak-btn{background:none;border:none;font-size:1.3rem;cursor:pointer;padding:4px;min-width:34px;min-height:34px;display:-webkit-inline-flex;display:inline-flex;-webkit-align-items:center;align-items:center;-webkit-justify-content:center;justify-content:center;}
 .empty-msg{color:#bbb;font-size:0.95rem;padding:20px 0;text-align:center;}
 .hidden{display:none !important;}
@@ -303,7 +303,7 @@ h1{color:white;font-size:1.6rem;margin:10px 0 8px;text-shadow:2px 2px 4px rgba(0
   -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);display:none;
 }
 
-@media(min-width:900px){.hero-panel{width:300px;}.hero-panel svg{width:280px;}}
+@media(min-width:900px){.hero-panel{width:300px;}.hero-panel svg{width:280px;}.card{max-width:860px;}.folder-panel{width:280px;}}
 @media(max-width:768px){
   body{-webkit-flex-direction:column;flex-direction:column;}
   .hero-panel{
