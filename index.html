@@ -651,6 +651,11 @@ function speak(t) {
   u.lang = 'en-US';
   u.rate = 0.85;
   u.pitch = 1.1;
+  // 영어 음성 찾기
+  var voices = speechSynthesis.getVoices();
+  for (var i = 0; i < voices.length; i++) {
+    if (voices[i].lang.indexOf('en') === 0) { u.voice = voices[i]; break; }
+  }
   speechSynthesis.speak(u);
 }
 
