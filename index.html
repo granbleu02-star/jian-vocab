@@ -1155,25 +1155,31 @@ function initFirebase() {
 
     // 실시간 리스너 - 다른 기기에서 변경 시 자동 반영
     fbRef.on('value', function(snap) {
+      if (isRemoteUpdate) return; // 자기 자신이 쓴 변경은 무시
       var remoteData = snap.val();
-      if (!remoteData) {
-        // Firebase에 데이터 없으면 로컬 데이터 업로드
-        uploadToFirebase();
+      var localData = loadData();
+      var remoteWords = remoteData ? countTotalWords(remoteData) : 0;
+      var localWords = countTotalWords(localData);
+
+      if (!remoteData || remoteWords === 0) {
+        // Firebase가 비었고 로컬에 데이터 있으면 업로드
+        if (localWords > 0) uploadToFirebase();
         return;
       }
-      var localData = loadData();
+
       var remoteTime = remoteData._lastUpdated || 0;
       var localTime = localData._lastUpdated || 0;
 
-      // 원격 데이터가 더 최신이면 로컬에 반영
-      if (remoteTime > localTime && !isRemoteUpdate) {
-        var merged = remoteData;
-        delete merged._lastUpdated;
-        if (merged.folders && merged.folders.length > 0) {
-          merged._lastUpdated = remoteTime;
-          try { localStorage.setItem(STORAGE_KEY, JSON.stringify(merged)); } catch(e) {}
-          data = merged;
-          // 현재 화면 새로고침
+      // 원격이 더 최신이고, 원격에 실제 데이터가 있을 때만 반영
+      if (remoteTime > localTime && remoteWords > 0) {
+        // 원격 데이터가 로컬보다 단어가 훨씬 적으면(50% 미만) 경고
+        if (localWords > 5 && remoteWords < localWords * 0.5) {
+          // 위험한 덮어쓰기 방지 — 더 많은 데이터 유지
+          return;
+        }
+        if (remoteData.folders && remoteData.folders.length > 0) {
+          try { localStorage.setItem(STORAGE_KEY, JSON.stringify(remoteData)); } catch(e) {}
+          data = remoteData;
           if (!document.getElementById('manageSection').classList.contains('hidden')) {
             renderManage();
           }
@@ -1181,22 +1187,37 @@ function initFirebase() {
           showSyncBadge('online', '동기화 완료!');
           setTimeout(function() { showSyncBadge('online', '동기화됨'); }, 2000);
         }
+      } else if (localTime > remoteTime && localWords > 0) {
+        // 로컬이 더 최신이면 업로드
+        uploadToFirebase();
       }
     });
 
-    // 초기 데이터 업로드
-    uploadToFirebase();
+    // 초기: 로컬에 데이터 있으면 업로드
+    if (countTotalWords(loadData()) > 0) uploadToFirebase();
     showSyncBadge('online', '동기화됨');
   } catch(e) {
     showSyncBadge('offline', '오프라인');
   }
 }
 
+function countTotalWords(d) {
+  var total = 0;
+  if (d && d.folders) {
+    for (var i = 0; i < d.folders.length; i++) {
+      total += (d.folders[i].words ? d.folders[i].words.length : 0);
+    }
+  }
+  return total;
+}
+
 function uploadToFirebase() {
   if (!syncEnabled || !fbRef) return;
   try {
-    isRemoteUpdate = true;
     var d = loadData();
+    // 빈 데이터는 업로드하지 않음 (기존 데이터 보호)
+    if (countTotalWords(d) === 0) return;
+    isRemoteUpdate = true;
     d._lastUpdated = Date.now();
     fbRef.set(d);
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(d)); } catch(e) {}
@@ -1216,7 +1237,7 @@ var _origSaveData = saveData;
 saveData = function(d) {
   d._lastUpdated = Date.now();
   _origSaveData(d);
-  if (syncEnabled && fbRef) {
+  if (syncEnabled && fbRef && countTotalWords(d) > 0) {
     try {
       isRemoteUpdate = true;
       fbRef.set(d);
