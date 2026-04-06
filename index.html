@@ -236,6 +236,11 @@ h1{color:white;font-size:1.6rem;margin:10px 0 8px;text-shadow:2px 2px 4px rgba(0
 .folder-name{font-weight:600;font-size:0.88rem;-webkit-flex:1;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .folder-count{font-size:0.78rem;color:#aaa;margin-left:4px;}
 .btn-folder-del{background:none;border:none;color:#ccc;cursor:pointer;font-size:1rem;padding:4px 6px;min-width:28px;min-height:28px;}
+.btn-folder-action{background:none;border:none;color:#bbb;cursor:pointer;font-size:0.85rem;padding:2px 5px;min-width:24px;min-height:24px;display:inline-flex;-webkit-align-items:center;align-items:center;-webkit-justify-content:center;justify-content:center;border-radius:6px;}
+.btn-folder-action:active{background:#eee;}
+.folder-item.active .btn-folder-action{color:rgba(255,255,255,0.6);}
+.folder-item.active .btn-folder-action:active{background:rgba(255,255,255,0.15);}
+.folder-actions{display:-webkit-flex;display:flex;gap:1px;-webkit-flex-shrink:0;flex-shrink:0;margin-left:4px;}
 .new-folder-row{display:-webkit-flex;display:flex;gap:6px;margin-bottom:8px;}
 .new-folder-row input{
   -webkit-flex:1;flex:1;padding:9px;border:2px solid #e0e0e0;border-radius:10px;
@@ -926,9 +931,50 @@ function renderFolderList() {
   var html = '';
   for (var i = 0; i < data.folders.length; i++) {
     var f = data.folders[i];
-    html += '<div class="folder-item ' + (i === activeFolderIdx ? 'active' : '') + '" onclick="selectFolder(' + i + ')"><span class="folder-name">' + esc(f.name) + '</span><span class="folder-count">' + f.words.length + '</span><button class="btn-folder-del" onclick="event.stopPropagation();deleteFolder(' + i + ')">&times;</button></div>';
+    var upBtn = i > 0 ? '<button class="btn-folder-action" onclick="event.stopPropagation();moveFolderUp(' + i + ')" title="위로">&#9650;</button>' : '<button class="btn-folder-action" style="visibility:hidden">&#9650;</button>';
+    var dnBtn = i < data.folders.length - 1 ? '<button class="btn-folder-action" onclick="event.stopPropagation();moveFolderDown(' + i + ')" title="아래로">&#9660;</button>' : '<button class="btn-folder-action" style="visibility:hidden">&#9660;</button>';
+    html += '<div class="folder-item ' + (i === activeFolderIdx ? 'active' : '') + '" onclick="selectFolder(' + i + ')">';
+    html += '<span class="folder-name">' + esc(f.name) + '</span>';
+    html += '<span class="folder-count">' + f.words.length + '</span>';
+    html += '<div class="folder-actions">';
+    html += upBtn + dnBtn;
+    html += '<button class="btn-folder-action" onclick="event.stopPropagation();renameFolder(' + i + ')" title="이름 수정">&#9998;</button>';
+    html += '<button class="btn-folder-action" onclick="event.stopPropagation();deleteFolder(' + i + ')" title="삭제">&times;</button>';
+    html += '</div></div>';
   }
   document.getElementById('folderList').innerHTML = html;
+}
+
+function renameFolder(idx) {
+  var oldName = data.folders[idx].name;
+  var newName = prompt('폴더 이름 수정:', oldName);
+  if (!newName || newName.trim() === '' || newName.trim() === oldName) return;
+  newName = newName.trim();
+  for (var i = 0; i < data.folders.length; i++) {
+    if (i !== idx && data.folders[i].name === newName) { alert('같은 이름의 폴더가 있어요!'); return; }
+  }
+  data.folders[idx].name = newName;
+  saveData(data); renderManage();
+}
+
+function moveFolderUp(idx) {
+  if (idx <= 0) return;
+  var temp = data.folders[idx];
+  data.folders[idx] = data.folders[idx - 1];
+  data.folders[idx - 1] = temp;
+  if (activeFolderIdx === idx) activeFolderIdx = idx - 1;
+  else if (activeFolderIdx === idx - 1) activeFolderIdx = idx;
+  saveData(data); renderManage();
+}
+
+function moveFolderDown(idx) {
+  if (idx >= data.folders.length - 1) return;
+  var temp = data.folders[idx];
+  data.folders[idx] = data.folders[idx + 1];
+  data.folders[idx + 1] = temp;
+  if (activeFolderIdx === idx) activeFolderIdx = idx + 1;
+  else if (activeFolderIdx === idx + 1) activeFolderIdx = idx;
+  saveData(data); renderManage();
 }
 
 /* 사전 */
