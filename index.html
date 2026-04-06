@@ -645,17 +645,28 @@ if (isIOS) {
   speechReady = true;
 }
 
+// 영어 음성 미리 로드 (Chrome은 비동기 로드)
+var _engVoice = null;
+function findEngVoice() {
+  var voices = speechSynthesis.getVoices();
+  if (!voices || voices.length === 0) return;
+  for (var i = 0; i < voices.length; i++) {
+    if (voices[i].lang.indexOf('en') === 0) { _engVoice = voices[i]; return; }
+  }
+}
+findEngVoice();
+if (typeof speechSynthesis !== 'undefined' && speechSynthesis.onvoiceschanged !== undefined) {
+  speechSynthesis.onvoiceschanged = findEngVoice;
+}
+
 function speak(t) {
   speechSynthesis.cancel();
+  if (!_engVoice) findEngVoice();
   var u = new SpeechSynthesisUtterance(t);
   u.lang = 'en-US';
   u.rate = 0.85;
   u.pitch = 1.1;
-  // 영어 음성 찾기
-  var voices = speechSynthesis.getVoices();
-  for (var i = 0; i < voices.length; i++) {
-    if (voices[i].lang.indexOf('en') === 0) { u.voice = voices[i]; break; }
-  }
+  if (_engVoice) u.voice = _engVoice;
   speechSynthesis.speak(u);
 }
 
