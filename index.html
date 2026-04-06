@@ -12,11 +12,15 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 <style>
-/* 동기화 상태 표시 */
-.sync-badge{position:fixed;top:8px;right:8px;z-index:100;padding:4px 10px;border-radius:12px;font-size:0.72rem;font-weight:600;color:white;display:none;}
-.sync-badge.online{display:block;background:#27ae60;}
-.sync-badge.offline{display:block;background:#e74c3c;}
-.sync-badge.syncing{display:block;background:#f7971e;}
+/* 동기화 바 */
+.sync-bar{display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;-webkit-justify-content:center;justify-content:center;gap:8px;padding:6px 12px;margin-bottom:10px;border-radius:12px;background:#f8f8fc;border:1px solid #e8e8f0;}
+.sync-bar .sync-status{font-size:0.78rem;color:#888;}
+.sync-bar .sync-status.online{color:#27ae60;}
+.sync-bar .sync-status.offline{color:#e74c3c;}
+.btn-sync{padding:6px 16px;border:none;border-radius:10px;font-size:0.82rem;font-weight:700;cursor:pointer;min-height:34px;color:white;background:linear-gradient(135deg,#667eea,#764ba2);-webkit-appearance:none;appearance:none;}
+.btn-sync:active{-webkit-transform:scale(0.95);transform:scale(0.95);}
+.btn-sync.uploading{background:linear-gradient(135deg,#f7971e,#ffd200);color:#333;}
+.btn-sync.done{background:#27ae60;}
 /* 폴더 체크박스 */
 /* 플래시카드 */
 .flash-card-area{display:-webkit-flex;display:flex;-webkit-flex-direction:column;flex-direction:column;-webkit-align-items:center;align-items:center;gap:16px;padding:10px 0;}
@@ -367,9 +371,6 @@ h1{color:white;font-size:1.6rem;margin:10px 0 8px;text-shadow:2px 2px 4px rgba(0
 </head>
 <body>
 
-<!-- 동기화 상태 배지 -->
-<div class="sync-badge" id="syncBadge"></div>
-
 <!-- 왼쪽 히어로 패널 -->
 <div class="hero-panel" id="heroPanel">
   <div id="heroSvg"></div>
@@ -407,6 +408,11 @@ h1{color:white;font-size:1.6rem;margin:10px 0 8px;text-shadow:2px 2px 4px rgba(0
 <!-- 메인 영역 -->
 <div class="main-area">
   <h1>지안이의 영어단어 테스트</h1>
+  <div class="sync-bar" id="syncBar">
+    <span class="sync-status" id="syncStatus">연결 확인 중...</span>
+    <button class="btn-sync" id="syncUpBtn" onclick="manualUpload()">업로드</button>
+    <button class="btn-sync" id="syncDownBtn" onclick="manualDownload()">다운로드</button>
+  </div>
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('test')">테스트</button>
     <button class="tab-btn" onclick="switchTab('flash')">플래시카드</button>
@@ -1332,136 +1338,91 @@ var firebaseConfig = {
 };
 
 var fbApp = null, fbDb = null, fbRef = null;
-var syncEnabled = false;
-var isRemoteUpdate = false; // 원격 업데이트 중복 방지
+var firebaseReady = false;
 
 function initFirebase() {
   try {
-    if (typeof firebase === 'undefined') { showSyncBadge('offline', '오프라인'); return; }
+    if (typeof firebase === 'undefined') { setSyncStatus('offline', '오프라인'); return; }
     fbApp = firebase.initializeApp(firebaseConfig);
     fbDb = firebase.database();
     fbRef = fbDb.ref('vocab');
-    syncEnabled = true;
-
-    // 연결 상태 감지
+    firebaseReady = true;
     fbDb.ref('.info/connected').on('value', function(snap) {
-      if (snap.val() === true) {
-        showSyncBadge('online', '동기화됨');
-      } else {
-        showSyncBadge('offline', '오프라인');
-      }
+      if (snap.val() === true) setSyncStatus('online', '클라우드 연결됨');
+      else setSyncStatus('offline', '오프라인');
     });
-
-    // 실시간 리스너 - 다른 기기에서 변경 시 자동 반영
-    fbRef.on('value', function(snap) {
-      if (isRemoteUpdate) return; // 자기 자신이 쓴 변경은 무시
-      var remoteData = snap.val();
-      var localData = loadData();
-      var remoteWords = remoteData ? countTotalWords(remoteData) : 0;
-      var localWords = countTotalWords(localData);
-
-      if (!remoteData || remoteWords === 0) {
-        // Firebase가 비었고 로컬에 데이터 있으면 업로드
-        if (localWords > 0) uploadToFirebase();
-        return;
-      }
-
-      var remoteTime = remoteData._lastUpdated || 0;
-      var localTime = localData._lastUpdated || 0;
-
-      // 원격이 더 최신이고, 원격에 실제 데이터가 있을 때만 반영
-      if (remoteTime > localTime && remoteWords > 0) {
-        // 원격 데이터가 로컬보다 단어가 훨씬 적으면(50% 미만) 경고
-        if (localWords > 5 && remoteWords < localWords * 0.5) {
-          // 위험한 덮어쓰기 방지 — 더 많은 데이터 유지
-          return;
-        }
-        if (remoteData.folders && remoteData.folders.length > 0) {
-          try { localStorage.setItem(STORAGE_KEY, JSON.stringify(remoteData)); } catch(e) {}
-          data = remoteData;
-          if (!document.getElementById('manageSection').classList.contains('hidden')) {
-            renderManage();
-          }
-          populateTestFolderSelect();
-          showSyncBadge('online', '동기화 완료!');
-          setTimeout(function() { showSyncBadge('online', '동기화됨'); }, 2000);
-        }
-      } else if (localTime > remoteTime && localWords > 0) {
-        // 로컬이 더 최신이면 업로드
-        uploadToFirebase();
-      }
-    });
-
-    // 초기: 로컬에 데이터 있으면 업로드
-    if (countTotalWords(loadData()) > 0) uploadToFirebase();
-    showSyncBadge('online', '동기화됨');
+    setSyncStatus('online', '클라우드 연결됨');
   } catch(e) {
-    showSyncBadge('offline', '오프라인');
+    setSyncStatus('offline', '연결 실패');
   }
 }
 
-function countTotalWords(d) {
-  var total = 0;
-  if (d && d.folders) {
-    for (var i = 0; i < d.folders.length; i++) {
-      total += (d.folders[i].words ? d.folders[i].words.length : 0);
-    }
-  }
-  return total;
+function setSyncStatus(cls, text) {
+  var el = document.getElementById('syncStatus');
+  if (el) { el.className = 'sync-status ' + cls; el.textContent = text; }
 }
 
-function uploadToFirebase() {
-  if (!syncEnabled || !fbRef) return;
-  try {
-    var d = loadData();
-    // 빈 데이터는 업로드하지 않음 (기존 데이터 보호)
-    if (countTotalWords(d) === 0) return;
-    isRemoteUpdate = true;
-    d._lastUpdated = Date.now();
-    fbRef.set(d);
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(d)); } catch(e) {}
-    setTimeout(function() { isRemoteUpdate = false; }, 500);
-  } catch(e) {}
-}
-
-function showSyncBadge(cls, text) {
-  var badge = document.getElementById('syncBadge');
-  if (!badge) return;
-  badge.className = 'sync-badge ' + cls;
-  badge.textContent = text;
-}
-
-// saveData를 오버라이드하여 Firebase에도 저장
-var _origSaveData = saveData;
-saveData = function(d) {
+function manualUpload() {
+  if (!firebaseReady || !fbRef) { alert('클라우드에 연결되어 있지 않아요.'); return; }
+  var d = loadData();
+  if (countTotalWords(d) === 0) { alert('업로드할 단어가 없어요.'); return; }
+  if (!confirm('이 기기의 단어(' + countTotalWords(d) + '개)를 클라우드에 업로드할까요?')) return;
+  var btn = document.getElementById('syncUpBtn');
+  btn.className = 'btn-sync uploading'; btn.textContent = '업로드 중...';
   d._lastUpdated = Date.now();
-  _origSaveData(d);
-  if (syncEnabled && fbRef && countTotalWords(d) > 0) {
-    try {
-      isRemoteUpdate = true;
-      fbRef.set(d);
-      showSyncBadge('syncing', '저장 중...');
-      setTimeout(function() {
-        isRemoteUpdate = false;
-        showSyncBadge('online', '동기화됨');
-      }, 800);
-    } catch(e) {}
-  }
-};
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(d)); } catch(e) {}
+  fbRef.set(d, function(err) {
+    if (err) {
+      btn.className = 'btn-sync'; btn.textContent = '업로드';
+      alert('업로드 실패: ' + err.message);
+    } else {
+      btn.className = 'btn-sync done'; btn.textContent = '업로드 완료!';
+      setSyncStatus('online', '업로드 완료 (' + countTotalWords(d) + '개 단어)');
+      setTimeout(function() { btn.className = 'btn-sync'; btn.textContent = '업로드'; }, 2500);
+    }
+  });
+}
+
+function manualDownload() {
+  if (!firebaseReady || !fbRef) { alert('클라우드에 연결되어 있지 않아요.'); return; }
+  var btn = document.getElementById('syncDownBtn');
+  btn.className = 'btn-sync uploading'; btn.textContent = '다운로드 중...';
+  fbRef.once('value', function(snap) {
+    var remoteData = snap.val();
+    if (!remoteData || !remoteData.folders || countTotalWords(remoteData) === 0) {
+      btn.className = 'btn-sync'; btn.textContent = '다운로드';
+      alert('클라우드에 저장된 단어가 없어요.\n먼저 다른 기기에서 업로드 해주세요!');
+      return;
+    }
+    var remoteWords = countTotalWords(remoteData);
+    var localWords = countTotalWords(loadData());
+    var msg = '클라우드에서 ' + remoteWords + '개 단어를 가져올까요?';
+    if (localWords > 0) msg += '\n\n현재 이 기기의 ' + localWords + '개 단어가 클라우드 데이터로 교체됩니다.';
+    if (!confirm(msg)) {
+      btn.className = 'btn-sync'; btn.textContent = '다운로드';
+      return;
+    }
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(remoteData)); } catch(e) {}
+    data = remoteData;
+    if (!document.getElementById('manageSection').classList.contains('hidden')) renderManage();
+    populateTestFolderSelect();
+    btn.className = 'btn-sync done'; btn.textContent = '다운로드 완료!';
+    setSyncStatus('online', '다운로드 완료 (' + remoteWords + '개 단어)');
+    setTimeout(function() { btn.className = 'btn-sync'; btn.textContent = '다운로드'; }, 2500);
+  }, function(err) {
+    btn.className = 'btn-sync'; btn.textContent = '다운로드';
+    alert('다운로드 실패: ' + err.message);
+  });
+}
 
 /* 초기화 */
 initHeroNav();
 populateTestFolderSelect();
 
-// Firebase 초기화 (SDK 로드 후)
 if (typeof firebase !== 'undefined') {
   initFirebase();
 } else {
-  // SDK 로드 대기
-  window.addEventListener('load', function() {
-    setTimeout(initFirebase, 500);
-  });
+  window.addEventListener('load', function() { setTimeout(initFirebase, 500); });
 }
-</script>
 </body>
 </html>
