@@ -18,6 +18,44 @@
 .sync-badge.offline{display:block;background:#e74c3c;}
 .sync-badge.syncing{display:block;background:#f7971e;}
 /* 폴더 체크박스 */
+/* 플래시카드 */
+.flash-card-area{display:-webkit-flex;display:flex;-webkit-flex-direction:column;flex-direction:column;-webkit-align-items:center;align-items:center;gap:16px;padding:10px 0;}
+.flash-card{
+  width:100%;max-width:460px;min-height:220px;border-radius:20px;cursor:pointer;
+  display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;-webkit-justify-content:center;justify-content:center;
+  padding:30px 24px;text-align:center;position:relative;
+  -webkit-transition:-webkit-transform 0.5s;transition:transform 0.5s;
+  -webkit-transform-style:preserve-3d;transform-style:preserve-3d;
+  -webkit-perspective:600px;perspective:600px;
+}
+.flash-card-inner{
+  width:100%;min-height:200px;position:relative;
+  -webkit-transition:-webkit-transform 0.5s;transition:transform 0.5s;
+  -webkit-transform-style:preserve-3d;transform-style:preserve-3d;
+}
+.flash-card-inner.flipped{-webkit-transform:rotateY(180deg);transform:rotateY(180deg);}
+.flash-front,.flash-back{
+  position:absolute;top:0;left:0;right:0;bottom:0;
+  -webkit-backface-visibility:hidden;backface-visibility:hidden;
+  border-radius:20px;display:-webkit-flex;display:flex;
+  -webkit-flex-direction:column;flex-direction:column;
+  -webkit-align-items:center;align-items:center;-webkit-justify-content:center;justify-content:center;
+  padding:28px 20px;
+}
+.flash-front{background:linear-gradient(135deg,#667eea,#764ba2);color:white;box-shadow:0 8px 32px rgba(102,126,234,0.3);}
+.flash-back{background:linear-gradient(135deg,#27ae60,#2ecc71);color:white;-webkit-transform:rotateY(180deg);transform:rotateY(180deg);box-shadow:0 8px 32px rgba(39,174,96,0.3);}
+.flash-front-label{font-size:0.8rem;opacity:0.7;margin-bottom:8px;}
+.flash-def{font-size:1.35rem;font-weight:600;line-height:1.5;}
+.flash-word{font-size:2.2rem;font-weight:800;letter-spacing:1px;}
+.flash-phonetic{font-size:0.95rem;opacity:0.7;margin-top:6px;}
+.flash-tap-hint{font-size:0.78rem;opacity:0.5;margin-top:12px;}
+.flash-progress{font-size:0.9rem;color:#999;}
+.flash-nav{display:-webkit-flex;display:flex;gap:12px;-webkit-align-items:center;align-items:center;}
+.flash-nav .btn{min-width:100px;}
+.flash-counter{font-size:1.1rem;font-weight:700;color:#667eea;min-width:60px;text-align:center;}
+.flash-settings{display:-webkit-flex;display:flex;-webkit-flex-direction:column;flex-direction:column;gap:10px;-webkit-align-items:center;align-items:center;}
+.flash-folder-chips{display:-webkit-flex;display:flex;-webkit-flex-wrap:wrap;flex-wrap:wrap;gap:6px;-webkit-justify-content:center;justify-content:center;}
+
 .folder-chip{display:inline-flex;align-items:center;gap:4px;padding:6px 12px;border-radius:16px;border:2px solid #ddd;background:white;cursor:pointer;font-size:0.82rem;font-weight:600;color:#666;-webkit-transition:all 0.2s;transition:all 0.2s;min-height:34px;-webkit-user-select:none;user-select:none;}
 .folder-chip:active{-webkit-transform:scale(0.95);transform:scale(0.95);}
 .folder-chip.checked{border-color:#667eea;background:#eef0ff;color:#667eea;}
@@ -371,6 +409,7 @@ h1{color:white;font-size:1.6rem;margin:10px 0 8px;text-shadow:2px 2px 4px rgba(0
   <h1>지안이의 영어단어 테스트</h1>
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('test')">테스트</button>
+    <button class="tab-btn" onclick="switchTab('flash')">플래시카드</button>
     <button class="tab-btn" onclick="switchTab('manage')">단어 관리</button>
   </div>
 
@@ -408,6 +447,46 @@ h1{color:white;font-size:1.6rem;margin:10px 0 8px;text-shadow:2px 2px 4px rgba(0
     </div>
     <div class="final-result" id="finalResult"><h2>테스트 완료!</h2><div id="finalKirbyWrap" style="margin:8px 0"></div><div class="final-score" id="finalScore"></div><div class="final-msg" id="finalMsg"></div><button class="btn btn-primary" style="font-size:1.05rem;padding:12px 32px" onclick="startQuiz()">다시 하기</button></div>
     <div id="noWordsMsg" class="empty-msg" style="display:none">선택한 폴더에 단어가 없어요.<br>단어 관리에서 추가해주세요!</div>
+  </div>
+
+  <!-- 플래시카드 -->
+  <div class="card hidden" id="flashSection">
+    <div class="flash-settings" id="flashSettings">
+      <div style="font-size:0.95rem;color:#666;font-weight:600;">플래시카드 폴더 선택:</div>
+      <div class="flash-folder-chips" id="flashFolderChips"></div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center;margin-top:6px;">
+        <label style="font-size:0.9rem;color:#666;">순서:
+          <select id="flashOrder" style="padding:7px 10px;border:2px solid #e0e0e0;border-radius:10px;font-size:16px;-webkit-appearance:none;appearance:none;min-height:38px;background:white;">
+            <option value="random">랜덤</option>
+            <option value="order">순서대로</option>
+          </select>
+        </label>
+        <button class="btn btn-primary" style="padding:10px 24px;font-size:0.95rem;" onclick="startFlashcards()">시작</button>
+      </div>
+    </div>
+    <div class="flash-card-area hidden" id="flashCardArea">
+      <div class="flash-progress" id="flashProgress"></div>
+      <div class="flash-card" onclick="flipFlashcard()">
+        <div class="flash-card-inner" id="flashCardInner">
+          <div class="flash-front">
+            <div class="flash-front-label">뜻 (Definition)</div>
+            <div class="flash-def" id="flashDef"></div>
+            <div class="flash-tap-hint">탭해서 정답 확인</div>
+          </div>
+          <div class="flash-back">
+            <div class="flash-word" id="flashWord"></div>
+            <div class="flash-phonetic" id="flashPhonetic"></div>
+            <div class="flash-tap-hint">탭해서 다음으로</div>
+          </div>
+        </div>
+      </div>
+      <div class="flash-nav">
+        <button class="btn btn-light" onclick="flashPrev()">이전</button>
+        <div class="flash-counter" id="flashCounter"></div>
+        <button class="btn btn-primary" onclick="flashNext()">다음</button>
+      </div>
+      <button class="btn btn-light" style="margin-top:6px;font-size:0.82rem;" onclick="endFlashcards()">종료</button>
+    </div>
   </div>
 
   <div class="card hidden" id="manageSection">
@@ -1095,18 +1174,138 @@ function renderWordList() {
 function renderManage() { renderFolderList(); renderWordList(); }
 
 /* 탭 */
+/* ============================================================
+   플래시카드
+   ============================================================ */
+var flashWords = [], flashIdx = 0, flashFlipped = false;
+
+function populateFlashFolderChips() {
+  var box = document.getElementById('flashFolderChips');
+  var html = '<div class="folder-chip checked" onclick="toggleAllFoldersFlash(this)" data-idx="__all__">전체</div>';
+  for (var i = 0; i < data.folders.length; i++) {
+    html += '<div class="folder-chip checked" onclick="toggleFlashChip(this)" data-idx="' + i + '">' + esc(data.folders[i].name) + ' <span class="chip-count">(' + data.folders[i].words.length + ')</span></div>';
+  }
+  box.innerHTML = html;
+}
+
+function toggleFlashChip(el) {
+  if (el.className.indexOf('checked') >= 0) el.className = 'folder-chip';
+  else el.className = 'folder-chip checked';
+  var chips = document.querySelectorAll('#flashFolderChips .folder-chip');
+  var allChecked = true;
+  for (var i = 1; i < chips.length; i++) { if (chips[i].className.indexOf('checked') < 0) { allChecked = false; break; } }
+  chips[0].className = allChecked ? 'folder-chip checked' : 'folder-chip';
+}
+
+function toggleAllFoldersFlash(el) {
+  var chips = document.querySelectorAll('#flashFolderChips .folder-chip');
+  var allOn = el.className.indexOf('checked') >= 0;
+  for (var i = 0; i < chips.length; i++) chips[i].className = allOn ? 'folder-chip' : 'folder-chip checked';
+}
+
+function getFlashWords() {
+  var chips = document.querySelectorAll('#flashFolderChips .folder-chip');
+  if (chips[0] && chips[0].className.indexOf('checked') >= 0) {
+    var all = [];
+    for (var i = 0; i < data.folders.length; i++) all = all.concat(data.folders[i].words);
+    return all;
+  }
+  var words = [];
+  for (var j = 1; j < chips.length; j++) {
+    if (chips[j].className.indexOf('checked') >= 0) {
+      var idx = parseInt(chips[j].getAttribute('data-idx'));
+      if (idx >= 0 && idx < data.folders.length) words = words.concat(data.folders[idx].words);
+    }
+  }
+  return words;
+}
+
+function startFlashcards() {
+  var words = getFlashWords();
+  if (words.length === 0) { alert('선택한 폴더에 단어가 없어요!'); return; }
+  var order = document.getElementById('flashOrder').value;
+  if (order === 'random') {
+    flashWords = words.slice().sort(function() { return Math.random() - 0.5; });
+  } else {
+    flashWords = words.slice();
+  }
+  flashIdx = 0;
+  document.getElementById('flashSettings').classList.add('hidden');
+  document.getElementById('flashCardArea').classList.remove('hidden');
+  showFlashcard();
+}
+
+function endFlashcards() {
+  document.getElementById('flashSettings').classList.remove('hidden');
+  document.getElementById('flashCardArea').classList.add('hidden');
+}
+
+function showFlashcard() {
+  if (flashIdx < 0) flashIdx = 0;
+  if (flashIdx >= flashWords.length) flashIdx = flashWords.length - 1;
+  var w = flashWords[flashIdx];
+  document.getElementById('flashDef').textContent = w.definition;
+  document.getElementById('flashWord').textContent = w.word;
+  document.getElementById('flashPhonetic').textContent = '';
+  document.getElementById('flashProgress').textContent = (flashIdx + 1) + ' / ' + flashWords.length;
+  document.getElementById('flashCounter').textContent = (flashIdx + 1) + ' / ' + flashWords.length;
+  // 항상 앞면으로 리셋
+  flashFlipped = false;
+  document.getElementById('flashCardInner').className = 'flash-card-inner';
+}
+
+function flipFlashcard() {
+  flashFlipped = !flashFlipped;
+  var inner = document.getElementById('flashCardInner');
+  if (flashFlipped) {
+    inner.className = 'flash-card-inner flipped';
+    speak(flashWords[flashIdx].word);
+  } else {
+    // 뒷면에서 다시 탭하면 다음으로
+    flashNext();
+  }
+}
+
+function flashNext() {
+  if (flashIdx < flashWords.length - 1) {
+    flashIdx++;
+    showFlashcard();
+  } else {
+    alert('모든 카드를 다 봤어요!');
+    endFlashcards();
+  }
+}
+
+function flashPrev() {
+  if (flashIdx > 0) {
+    flashIdx--;
+    showFlashcard();
+  }
+}
+
+/* ============================================================
+   탭 전환
+   ============================================================ */
 function switchTab(tab) {
   var btns = document.querySelectorAll('.tab-btn');
+  var tabs = ['test', 'flash', 'manage'];
   for (var i = 0; i < btns.length; i++) {
-    if ((tab === 'test' && i === 0) || (tab === 'manage' && i === 1)) btns[i].classList.add('active');
+    if (tabs[i] === tab) btns[i].classList.add('active');
     else btns[i].classList.remove('active');
   }
+  document.getElementById('testSection').classList.add('hidden');
+  document.getElementById('flashSection').classList.add('hidden');
+  document.getElementById('manageSection').classList.add('hidden');
+
   if (tab === 'test') {
     document.getElementById('testSection').classList.remove('hidden');
-    document.getElementById('manageSection').classList.add('hidden');
     data = loadData(); populateTestFolderSelect();
+  } else if (tab === 'flash') {
+    document.getElementById('flashSection').classList.remove('hidden');
+    data = loadData(); populateFlashFolderChips();
+    document.getElementById('flashSettings').classList.remove('hidden');
+    document.getElementById('flashCardArea').classList.add('hidden');
   } else {
-    document.getElementById('testSection').classList.add('hidden');
     document.getElementById('manageSection').classList.remove('hidden');
     data = loadData(); renderManage();
   }
