@@ -645,11 +645,24 @@ if (isIOS) {
   speechReady = true;
 }
 
-// 영어 음성 미리 로드 (Chrome은 비동기 로드)
+// 영어 여자 음성 미리 로드
 var _engVoice = null;
 function findEngVoice() {
   var voices = speechSynthesis.getVoices();
   if (!voices || voices.length === 0) return;
+  // 여자 영어 음성 이름 (iPad/Mac/PC 공통)
+  var female = ['Samantha','Karen','Victoria','Allison','Ava','Susan','Moira','Fiona',
+    'Tessa','Serena','Zira','Microsoft Zira','Google US English Female',
+    'Google UK English Female','Shelley','Veena','Kate'];
+  // 1단계: 여자 음성 이름으로 찾기
+  for (var f = 0; f < female.length; f++) {
+    for (var v = 0; v < voices.length; v++) {
+      if (voices[v].lang.indexOf('en') === 0 && voices[v].name.indexOf(female[f]) >= 0) {
+        _engVoice = voices[v]; return;
+      }
+    }
+  }
+  // 2단계: en-US 아무거나
   for (var i = 0; i < voices.length; i++) {
     if (voices[i].lang.indexOf('en') === 0) { _engVoice = voices[i]; return; }
   }
