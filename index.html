@@ -17,6 +17,12 @@
 .sync-badge.online{display:block;background:#27ae60;}
 .sync-badge.offline{display:block;background:#e74c3c;}
 .sync-badge.syncing{display:block;background:#f7971e;}
+/* 폴더 체크박스 */
+.folder-chip{display:inline-flex;align-items:center;gap:4px;padding:6px 12px;border-radius:16px;border:2px solid #ddd;background:white;cursor:pointer;font-size:0.82rem;font-weight:600;color:#666;-webkit-transition:all 0.2s;transition:all 0.2s;min-height:34px;-webkit-user-select:none;user-select:none;}
+.folder-chip:active{-webkit-transform:scale(0.95);transform:scale(0.95);}
+.folder-chip.checked{border-color:#667eea;background:#eef0ff;color:#667eea;}
+.folder-chip .chip-count{font-size:0.72rem;color:#aaa;margin-left:2px;}
+.folder-chip.checked .chip-count{color:#99a8f0;}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html{height:-webkit-fill-available;}
 body{
@@ -364,12 +370,15 @@ h1{color:white;font-size:1.6rem;margin:10px 0 8px;text-shadow:2px 2px 4px rgba(0
   </div>
 
   <div class="card" id="testSection">
-    <div class="settings">
-      <label>폴더: <select id="testFolder"></select></label>
-      <label>문제 수:
-        <select id="questionCount"><option value="5">5</option><option value="10" selected>10</option><option value="15">15</option><option value="20">20</option><option value="0">전체</option></select>
-      </label>
-      <button class="btn btn-primary" style="padding:8px 16px;font-size:0.88rem" onclick="startQuiz()">시작</button>
+    <div class="settings" style="flex-direction:column;gap:10px;">
+      <div style="font-size:0.9rem;color:#666;font-weight:600;">테스트할 폴더 선택:</div>
+      <div id="folderCheckboxes" style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;"></div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center;">
+        <label style="font-size:0.9rem;color:#666;">문제 수:
+          <select id="questionCount"><option value="5">5</option><option value="10" selected>10</option><option value="15">15</option><option value="20">20</option><option value="0">전체</option></select>
+        </label>
+        <button class="btn btn-primary" style="padding:8px 16px;font-size:0.88rem" onclick="startQuiz()">시작</button>
+      </div>
     </div>
     <div id="quizArea" style="display:none">
       <div class="score-bar"><div>맞음: <span class="score-correct" id="correctCount">0</span></div><div>틀림: <span class="score-wrong" id="wrongCount">0</span></div></div>
@@ -676,26 +685,70 @@ var quizWords = [], currentIndex = 0, correctTotal = 0, wrongTotal = 0, hintLeve
 
 /* 테스트 */
 function populateTestFolderSelect() {
-  var s = document.getElementById('testFolder');
-  var html = '<option value="__all__">전체</option>';
+  var box = document.getElementById('folderCheckboxes');
+  var html = '<div class="folder-chip checked" onclick="toggleAllFolders(this)" data-idx="__all__">전체</div>';
   for (var i = 0; i < data.folders.length; i++) {
-    html += '<option value="' + i + '">' + esc(data.folders[i].name) + ' (' + data.folders[i].words.length + ')</option>';
+    html += '<div class="folder-chip checked" onclick="toggleFolderChip(this)" data-idx="' + i + '">' + esc(data.folders[i].name) + ' <span class="chip-count">(' + data.folders[i].words.length + ')</span></div>';
   }
-  s.innerHTML = html;
+  box.innerHTML = html;
+}
+
+function toggleFolderChip(el) {
+  var wasChecked = el.className.indexOf('checked') >= 0;
+  if (wasChecked) {
+    el.className = 'folder-chip';
+  } else {
+    el.className = 'folder-chip checked';
+  }
+  // "전체" 버튼 상태 업데이트
+  updateAllChipState();
+}
+
+function toggleAllFolders(el) {
+  var chips = document.querySelectorAll('#folderCheckboxes .folder-chip');
+  var allChecked = el.className.indexOf('checked') >= 0;
+  for (var i = 0; i < chips.length; i++) {
+    if (allChecked) {
+      chips[i].className = 'folder-chip';
+    } else {
+      chips[i].className = 'folder-chip checked';
+    }
+  }
+}
+
+function updateAllChipState() {
+  var chips = document.querySelectorAll('#folderCheckboxes .folder-chip');
+  var allBtn = chips[0]; // "전체" 버튼
+  var allChecked = true;
+  for (var i = 1; i < chips.length; i++) {
+    if (chips[i].className.indexOf('checked') < 0) { allChecked = false; break; }
+  }
+  if (allChecked) allBtn.className = 'folder-chip checked';
+  else allBtn.className = 'folder-chip';
 }
 
 function getTestWords() {
-  var v = document.getElementById('testFolder').value;
-  if (v === '__all__') {
+  var chips = document.querySelectorAll('#folderCheckboxes .folder-chip');
+  var selected = [];
+  // 첫 번째(전체)가 체크되면 모든 폴더
+  if (chips[0] && chips[0].className.indexOf('checked') >= 0) {
     var all = [];
     for (var i = 0; i < data.folders.length; i++) {
       all = all.concat(data.folders[i].words);
     }
     return all;
   }
-  var idx = parseInt(v);
-  if (idx >= 0 && idx < data.folders.length) return data.folders[idx].words;
-  return [];
+  // 개별 선택
+  var words = [];
+  for (var j = 1; j < chips.length; j++) {
+    if (chips[j].className.indexOf('checked') >= 0) {
+      var idx = parseInt(chips[j].getAttribute('data-idx'));
+      if (idx >= 0 && idx < data.folders.length) {
+        words = words.concat(data.folders[idx].words);
+      }
+    }
+  }
+  return words;
 }
 
 function startQuiz() {
