@@ -644,10 +644,49 @@ if (isIOS) {
   speechReady = true;
 }
 
+/* 원어민 영어 음성 선택 */
+var _enVoice = null;
+var _voicesLoaded = false;
+
+function loadEnglishVoice() {
+  var voices = speechSynthesis.getVoices();
+  if (!voices || voices.length === 0) return;
+  _voicesLoaded = true;
+  var preferred = ['Samantha', 'Karen', 'Daniel', 'Google US English', 'Google UK English',
+    'Alex', 'Moira', 'Tessa', 'Fiona', 'Victoria', 'Allison', 'Ava', 'Susan', 'Zira',
+    'Microsoft Zira', 'Microsoft David', 'Microsoft Mark'];
+  for (var p = 0; p < preferred.length; p++) {
+    for (var v = 0; v < voices.length; v++) {
+      if (voices[v].name.indexOf(preferred[p]) >= 0 && voices[v].lang.indexOf('en') === 0) {
+        _enVoice = voices[v]; return;
+      }
+    }
+  }
+  for (var i = 0; i < voices.length; i++) {
+    if (voices[i].lang === 'en-US' && voices[i].localService) { _enVoice = voices[i]; return; }
+  }
+  for (var j = 0; j < voices.length; j++) {
+    if (voices[j].lang.indexOf('en-US') >= 0) { _enVoice = voices[j]; return; }
+  }
+  for (var k = 0; k < voices.length; k++) {
+    if (voices[k].lang.indexOf('en') === 0) { _enVoice = voices[k]; return; }
+  }
+}
+if (typeof speechSynthesis !== 'undefined') {
+  if (speechSynthesis.onvoiceschanged !== undefined) {
+    speechSynthesis.onvoiceschanged = loadEnglishVoice;
+  }
+  loadEnglishVoice();
+}
+
 function speak(t) {
   speechSynthesis.cancel();
+  if (!_voicesLoaded) loadEnglishVoice();
   var u = new SpeechSynthesisUtterance(t);
-  u.lang = 'en-US'; u.rate = 0.85; u.pitch = 1.1;
+  u.lang = 'en-US';
+  u.rate = 0.9;
+  u.pitch = 1.0;
+  if (_enVoice) u.voice = _enVoice;
   speechSynthesis.speak(u);
 }
 
