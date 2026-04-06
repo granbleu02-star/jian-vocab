@@ -1378,18 +1378,37 @@ var firebaseReady = false;
 
 function initFirebase() {
   try {
-    if (typeof firebase === 'undefined') { setSyncStatus('offline', '오프라인'); return; }
-    fbApp = firebase.initializeApp(firebaseConfig);
+    if (typeof firebase === 'undefined') {
+      setSyncStatus('offline', '오프라인 (SDK 없음)');
+      return;
+    }
+    // 이미 초기화된 경우 방지
+    if (firebase.apps && firebase.apps.length > 0) {
+      fbApp = firebase.apps[0];
+    } else {
+      fbApp = firebase.initializeApp(firebaseConfig);
+    }
     fbDb = firebase.database();
     fbRef = fbDb.ref('vocab');
     firebaseReady = true;
-    fbDb.ref('.info/connected').on('value', function(snap) {
-      if (snap.val() === true) setSyncStatus('online', '클라우드 연결됨');
-      else setSyncStatus('offline', '오프라인');
-    });
     setSyncStatus('online', '클라우드 연결됨');
+
+    // 연결 상태 실시간 감지
+    try {
+      fbDb.ref('.info/connected').on('value', function(snap) {
+        if (snap.val() === true) setSyncStatus('online', '클라우드 연결됨');
+        else setSyncStatus('offline', '오프라인');
+      });
+    } catch(e2) {}
+
+    // 연결 테스트 — 실제로 읽기 시도
+    fbRef.once('value', function() {
+      setSyncStatus('online', '클라우드 연결됨');
+    }, function(err) {
+      setSyncStatus('offline', '연결 오류: ' + err.message);
+    });
   } catch(e) {
-    setSyncStatus('offline', '연결 실패');
+    setSyncStatus('offline', '연결 실패: ' + e.message);
   }
 }
 
@@ -1455,10 +1474,20 @@ function manualDownload() {
 initHeroNav();
 populateTestFolderSelect();
 
-if (typeof firebase !== 'undefined') {
-  initFirebase();
+// Firebase 초기화 — 여러 번 시도하여 SDK 로드 대기
+function tryInitFirebase(attempt) {
+  if (typeof firebase !== 'undefined' && firebase.initializeApp) {
+    initFirebase();
+  } else if (attempt < 10) {
+    setTimeout(function() { tryInitFirebase(attempt + 1); }, 500);
+  } else {
+    setSyncStatus('offline', '오프라인 (SDK 로드 실패)');
+  }
+}
+if (document.readyState === 'complete') {
+  tryInitFirebase(0);
 } else {
-  window.addEventListener('load', function() { setTimeout(initFirebase, 500); });
+  window.addEventListener('load', function() { tryInitFirebase(0); });
 }
 </body>
 </html>
