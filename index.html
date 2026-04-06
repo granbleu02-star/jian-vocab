@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="지안이 영단어">
+<meta name="mobile-web-app-capable" content="yes">
+<title>지안이의 영어단어 테스트</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{height:-webkit-fill-available;}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  min-height:100vh;min-height:-webkit-fill-available;
+  display:-webkit-flex;display:flex;-webkit-flex-direction:row;flex-direction:row;
+  -webkit-text-size-adjust:100%;
+  -webkit-transition:background 0.8s;transition:background 0.8s;
+  background:-webkit-linear-gradient(315deg,#667eea,#764ba2);
+  background:linear-gradient(135deg,#667eea,#764ba2);
+  overflow-x:hidden;
+}
+
+/* ===== 왼쪽 히어로 패널 ===== */
+.hero-panel{
+  width:260px;min-height:100vh;-webkit-flex-shrink:0;flex-shrink:0;
+  display:-webkit-flex;display:flex;-webkit-flex-direction:column;flex-direction:column;
+  -webkit-align-items:center;align-items:center;-webkit-justify-content:center;justify-content:center;
+  padding:20px 10px;position:relative;overflow:hidden;
+  -webkit-transition:background 0.8s;transition:background 0.8s;
+  background:rgba(0,0,0,0.15);
+}
+.hero-panel svg{
+  width:240px;height:auto;
+  -webkit-filter:drop-shadow(0 8px 24px rgba(0,0,0,0.3));
+  filter:drop-shadow(0 8px 24px rgba(0,0,0,0.3));
+  -webkit-transition:opacity 0.5s;transition:opacity 0.5s;
+}
+.hero-name{
+  color:white;font-size:1.3rem;font-weight:800;margin-top:12px;
+  text-shadow:0 2px 8px rgba(0,0,0,0.4);letter-spacing:1px;
+}
+.hero-quote{
+  color:rgba(255,255,255,0.7);font-size:0.82rem;margin-top:4px;
+  font-style:italic;text-align:center;padding:0 10px;
+}
+.hero-nav{display:-webkit-flex;display:flex;gap:8px;margin-top:14px;}
+.hero-dot{
+  width:12px;height:12px;border-radius:50%;border:2px solid rgba(255,255,255,0.5);
+  background:transparent;cursor:pointer;-webkit-transition:all 0.3s;transition:all 0.3s;
+}
+.hero-dot.active{background:white;border-color:white;-webkit-transform:scale(1.2);transform:scale(1.2);}
+
+/* ===== 오른쪽 메인 ===== */
+.main-area{
+  -webkit-flex:1;flex:1;
+  display:-webkit-flex;display:flex;-webkit-flex-direction:column;flex-direction:column;
+  -webkit-align-items:center;align-items:center;
+  padding:16px;overflow-y:auto;-webkit-overflow-scrolling:touch;min-height:100vh;
+}
+
+h1{color:white;font-size:1.6rem;margin:10px 0 8px;text-shadow:2px 2px 4px rgba(0,0,0,0.2);}
+.tabs{display:-webkit-flex;display:flex;gap:10px;margin-bottom:14px;}
+.tab-btn{
+  padding:12px 28px;border:none;border-radius:22px;font-size:1.05rem;
+  cursor:pointer;background:rgba(255,255,255,0.3);color:white;font-weight:600;
+  -webkit-transition:all 0.3s;transition:all 0.3s;min-height:44px;
+}
+.tab-btn.active{background:white;color:#764ba2;}
+.card{
+  background:rgba(255,255,255,0.97);border-radius:22px;padding:24px 22px;width:100%;max-width:600px;
+  box-shadow:0 16px 48px rgba(0,0,0,0.15);text-align:center;
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+}
+
+/* 테스트 */
+.score-bar{display:-webkit-flex;display:flex;-webkit-justify-content:center;justify-content:center;gap:28px;margin-bottom:14px;font-size:1.05rem;color:#555;}
+.score-bar span{font-weight:700;}
+.score-correct{color:#27ae60;}.score-wrong{color:#e74c3c;}
+.question-num{font-size:0.95rem;color:#aaa;margin-bottom:6px;}
+.definition{font-size:1.3rem;color:#333;line-height:1.6;margin-bottom:14px;min-height:40px;font-weight:500;}
+.hint{font-size:1.1rem;color:#888;margin-bottom:10px;letter-spacing:4px;font-weight:600;min-height:22px;}
+.input-area{display:-webkit-flex;display:flex;gap:8px;-webkit-justify-content:center;justify-content:center;margin-bottom:8px;-webkit-flex-wrap:wrap;flex-wrap:wrap;-webkit-align-items:center;align-items:center;}
+#answerInput{
+  font-size:16px;padding:12px 16px;border:3px solid #e0e0e0;border-radius:14px;
+  width:210px;text-align:center;outline:none;
+  -webkit-transition:border-color 0.3s;transition:border-color 0.3s;
+  -webkit-appearance:none;appearance:none;
+}
+#answerInput:focus{border-color:#667eea;}
+#answerInput.correct{border-color:#27ae60;background:#eafaf1;}
+#answerInput.wrong{border-color:#e74c3c;background:#fdf2f2;}
+.btn{
+  padding:12px 22px;border:none;border-radius:14px;font-size:1rem;font-weight:700;
+  cursor:pointer;-webkit-transition:-webkit-transform 0.15s;transition:transform 0.15s;
+  min-height:46px;-webkit-appearance:none;appearance:none;
+}
+.btn:active{-webkit-transform:scale(0.96);transform:scale(0.96);}
+.btn-primary{background:-webkit-linear-gradient(315deg,#667eea,#764ba2);background:linear-gradient(135deg,#667eea,#764ba2);color:white;}
+.btn-green{background:-webkit-linear-gradient(315deg,#27ae60,#2ecc71);background:linear-gradient(135deg,#27ae60,#2ecc71);color:white;}
+.btn-light{background:#f0f0f0;color:#666;font-size:0.88rem;padding:10px 16px;}
+.btn-orange{background:-webkit-linear-gradient(315deg,#f7971e,#ffd200);background:linear-gradient(135deg,#f7971e,#ffd200);color:#333;}
+.btn-danger{background:#fee;border:none;color:#e74c3c;padding:7px 12px;border-radius:10px;cursor:pointer;font-size:0.85rem;font-weight:600;min-height:34px;}
+.btn-edit{background:#e8f0fe;border:none;color:#667eea;padding:7px 12px;border-radius:10px;cursor:pointer;font-size:0.85rem;font-weight:600;min-height:34px;}
+.btn-row{display:-webkit-flex;display:flex;gap:8px;-webkit-flex-wrap:wrap;flex-wrap:wrap;-webkit-justify-content:center;justify-content:center;margin-top:6px;}
+.result-msg{font-size:1.05rem;font-weight:700;margin:6px 0;min-height:22px;}
+.result-msg.correct{color:#27ae60;}.result-msg.wrong{color:#e74c3c;}
+
+/* 마이크 */
+.mic-area{display:-webkit-flex;display:flex;-webkit-flex-direction:column;flex-direction:column;-webkit-align-items:center;align-items:center;gap:4px;margin:6px 0;}
+.mic-btn{
+  width:66px;height:66px;border-radius:50%;border:none;
+  background:-webkit-linear-gradient(315deg,#e74c3c,#c0392b);background:linear-gradient(135deg,#e74c3c,#c0392b);
+  color:white;font-size:1.8rem;cursor:pointer;position:relative;
+  display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;-webkit-justify-content:center;justify-content:center;
+  box-shadow:0 4px 16px rgba(231,76,60,0.4);
+  -webkit-transition:-webkit-transform 0.2s;transition:transform 0.2s;
+}
+.mic-btn:active{-webkit-transform:scale(0.92);transform:scale(0.92);}
+.mic-btn.listening{
+  -webkit-animation:micPulse 1s ease infinite;animation:micPulse 1s ease infinite;
+  background:-webkit-linear-gradient(315deg,#27ae60,#2ecc71);background:linear-gradient(135deg,#27ae60,#2ecc71);
+}
+.mic-timer{position:absolute;top:-4px;left:-4px;right:-4px;bottom:-4px;border-radius:50%;border:4px solid transparent;}
+.mic-timer.active{
+  border-color:#feca57;border-top-color:transparent;
+  -webkit-animation:timerSpin 5s linear forwards;animation:timerSpin 5s linear forwards;
+}
+.mic-label{font-size:0.8rem;color:#888;}
+.mic-result{font-size:1rem;font-weight:600;color:#667eea;min-height:20px;}
+@-webkit-keyframes micPulse{0%,100%{box-shadow:0 0 0 0 rgba(39,174,96,0.5);}50%{box-shadow:0 0 0 14px rgba(39,174,96,0);}}
+@keyframes micPulse{0%,100%{box-shadow:0 0 0 0 rgba(39,174,96,0.5);}50%{box-shadow:0 0 0 14px rgba(39,174,96,0);}}
+@-webkit-keyframes timerSpin{0%{-webkit-transform:rotate(0deg);}100%{-webkit-transform:rotate(360deg);}}
+@keyframes timerSpin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
+
+/* 커비 오버레이 */
+.kirby-overlay{position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:10;display:none;-webkit-justify-content:center;justify-content:center;-webkit-align-items:center;align-items:center;}
+.kirby-overlay.show{display:-webkit-flex;display:flex;}
+.kirby-inner{display:-webkit-flex;display:flex;-webkit-flex-direction:column;flex-direction:column;-webkit-align-items:center;align-items:center;}
+.kirby-inner.bounce{-webkit-animation:kirbyFly 2.5s ease-in-out 1;animation:kirbyFly 2.5s ease-in-out 1;}
+.kirby-inner.sad{-webkit-animation:kirbySadBig 1.5s ease 1;animation:kirbySadBig 1.5s ease 1;}
+.kirby-speech{font-size:2.4rem;font-weight:900;margin-bottom:2px;text-shadow:0 3px 12px rgba(0,0,0,0.15),0 0 30px rgba(255,255,255,0.5);}
+.kirby-speech.great{color:#f7971e;}.kirby-speech.ohno{color:#e74c3c;}
+.kirby-type-label{font-size:0.82rem;color:rgba(255,255,255,0.8);margin-top:2px;text-shadow:0 1px 4px rgba(0,0,0,0.3);}
+
+@-webkit-keyframes kirbyFly{
+  0%{-webkit-transform:translate(0,60px) scale(0.3);opacity:0;}
+  10%{-webkit-transform:translate(0,0) scale(1.1);opacity:1;}
+  20%{-webkit-transform:translate(-70px,-35px) scale(1);}
+  30%{-webkit-transform:translate(60px,-55px) scale(1.15) rotate(5deg);}
+  40%{-webkit-transform:translate(-50px,15px) scale(0.95) rotate(-5deg);}
+  50%{-webkit-transform:translate(70px,-25px) scale(1.1) rotate(3deg);}
+  60%{-webkit-transform:translate(-35px,-45px) scale(1.05) rotate(-3deg);}
+  70%{-webkit-transform:translate(45px,25px) scale(1.12) rotate(4deg);}
+  80%{-webkit-transform:translate(-25px,-15px) scale(1) rotate(0);}
+  90%{-webkit-transform:translate(0,-20px) scale(1.08);}
+  100%{-webkit-transform:translate(0,0) scale(1);opacity:1;}
+}
+@keyframes kirbyFly{
+  0%{transform:translate(0,60px) scale(0.3);opacity:0;}
+  10%{transform:translate(0,0) scale(1.1);opacity:1;}
+  20%{transform:translate(-70px,-35px) scale(1);}
+  30%{transform:translate(60px,-55px) scale(1.15) rotate(5deg);}
+  40%{transform:translate(-50px,15px) scale(0.95) rotate(-5deg);}
+  50%{transform:translate(70px,-25px) scale(1.1) rotate(3deg);}
+  60%{transform:translate(-35px,-45px) scale(1.05) rotate(-3deg);}
+  70%{transform:translate(45px,25px) scale(1.12) rotate(4deg);}
+  80%{transform:translate(-25px,-15px) scale(1) rotate(0);}
+  90%{transform:translate(0,-20px) scale(1.08);}
+  100%{transform:translate(0,0) scale(1);opacity:1;}
+}
+@-webkit-keyframes kirbySadBig{
+  0%{-webkit-transform:translate(0,40px) scale(0.3);opacity:0;}
+  15%{-webkit-transform:translate(0,0) scale(1);opacity:1;}
+  25%{-webkit-transform:translate(-22px,8px) rotate(-8deg);}
+  50%{-webkit-transform:translate(22px,-5px) rotate(8deg);}
+  75%{-webkit-transform:translate(-8px,4px) rotate(-3deg);}
+  100%{-webkit-transform:translate(0,0) scale(1);opacity:1;}
+}
+@keyframes kirbySadBig{
+  0%{transform:translate(0,40px) scale(0.3);opacity:0;}
+  15%{transform:translate(0,0) scale(1);opacity:1;}
+  25%{transform:translate(-22px,8px) rotate(-8deg);}
+  50%{transform:translate(22px,-5px) rotate(8deg);}
+  75%{transform:translate(-8px,4px) rotate(-3deg);}
+  100%{transform:translate(0,0) scale(1);opacity:1;}
+}
+@-webkit-keyframes starSpin{0%{-webkit-transform:rotate(0deg);}100%{-webkit-transform:rotate(360deg);}}
+@keyframes starSpin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
+@-webkit-keyframes flameFlicker{0%,100%{-webkit-transform:scaleY(1) scaleX(1);}50%{-webkit-transform:scaleY(1.15) scaleX(0.9);}}
+@keyframes flameFlicker{0%,100%{transform:scaleY(1) scaleX(1);}50%{transform:scaleY(1.15) scaleX(0.9);}}
+@-webkit-keyframes wingFlap{0%,100%{-webkit-transform:rotate(-5deg);}50%{-webkit-transform:rotate(-25deg);}}
+@keyframes wingFlap{0%,100%{transform:rotate(-5deg);}50%{transform:rotate(-25deg);}}
+
+.final-result{display:none;}
+.final-result h2{font-size:1.7rem;color:#764ba2;margin-bottom:10px;}
+.final-score{font-size:2.2rem;font-weight:800;color:#667eea;margin:12px 0;}
+.final-msg{font-size:1.05rem;color:#666;margin-bottom:16px;}
+.settings{display:-webkit-flex;display:flex;-webkit-justify-content:center;justify-content:center;gap:10px;margin-bottom:12px;-webkit-flex-wrap:wrap;flex-wrap:wrap;-webkit-align-items:center;align-items:center;}
+.settings label{font-size:0.9rem;color:#666;}
+.settings select{
+  padding:7px 10px;border:2px solid #e0e0e0;border-radius:10px;font-size:16px;
+  outline:none;min-height:38px;background:white;-webkit-appearance:none;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23999' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 10px center;padding-right:28px;
+}
+
+/* 폴더 */
+.manage-layout{display:-webkit-flex;display:flex;gap:14px;text-align:left;}
+.folder-panel{width:180px;-webkit-flex-shrink:0;flex-shrink:0;}
+.word-panel{-webkit-flex:1;flex:1;min-width:0;}
+.folder-list{margin-bottom:10px;max-height:260px;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.folder-item{
+  display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;
+  padding:9px 10px;border-radius:10px;cursor:pointer;margin-bottom:3px;min-height:42px;
+}
+.folder-item:active{background:#f0f0ff;}
+.folder-item.active{background:#667eea;color:white;}
+.folder-item.active .folder-count{color:rgba(255,255,255,0.7);}
+.folder-item.active .btn-folder-del{color:rgba(255,255,255,0.7);}
+.folder-name{font-weight:600;font-size:0.88rem;-webkit-flex:1;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.folder-count{font-size:0.78rem;color:#aaa;margin-left:4px;}
+.btn-folder-del{background:none;border:none;color:#ccc;cursor:pointer;font-size:1rem;padding:4px 6px;min-width:28px;min-height:28px;}
+.new-folder-row{display:-webkit-flex;display:flex;gap:6px;margin-bottom:8px;}
+.new-folder-row input{
+  -webkit-flex:1;flex:1;padding:9px;border:2px solid #e0e0e0;border-radius:10px;
+  font-size:16px;outline:none;min-width:0;min-height:42px;-webkit-appearance:none;appearance:none;
+}
+.new-folder-row input:focus{border-color:#667eea;}
+.btn-folder-add{background:#667eea;color:white;border:none;border-radius:10px;padding:0 14px;font-size:1.1rem;cursor:pointer;font-weight:700;min-height:42px;min-width:42px;}
+.btn-today{
+  width:100%;padding:9px;border:2px dashed #d0d0e0;border-radius:10px;
+  background:none;color:#667eea;font-weight:600;cursor:pointer;font-size:0.88rem;margin-bottom:8px;min-height:42px;
+}
+
+/* 사전 */
+.add-row{display:-webkit-flex;display:flex;gap:6px;margin-bottom:8px;-webkit-flex-wrap:wrap;flex-wrap:wrap;}
+.add-row input{
+  padding:9px 12px;border:2px solid #e0e0e0;border-radius:10px;
+  font-size:16px;outline:none;min-height:42px;-webkit-appearance:none;appearance:none;
+}
+.add-row input:focus{border-color:#667eea;}
+#searchWordInput{-webkit-flex:1;flex:1;min-width:90px;}
+.btn-search{
+  background:-webkit-linear-gradient(315deg,#f7971e,#ffd200);background:linear-gradient(135deg,#f7971e,#ffd200);
+  color:#333;border:none;border-radius:10px;padding:9px 14px;font-weight:700;cursor:pointer;font-size:0.9rem;min-height:42px;
+}
+.dict-results{background:#fafafe;border:2px solid #e8e8f0;border-radius:12px;padding:10px;margin-bottom:10px;display:none;max-height:240px;overflow-y:auto;-webkit-overflow-scrolling:touch;text-align:left;}
+.dict-word-title{font-size:1.05rem;font-weight:700;color:#333;}
+.dict-phonetic{font-size:0.85rem;color:#888;margin-bottom:8px;}
+.dict-entry{margin-bottom:8px;}
+.dict-pos{font-weight:700;color:#764ba2;font-size:0.82rem;text-transform:uppercase;margin-bottom:3px;}
+.dict-def-item{display:-webkit-flex;display:flex;-webkit-align-items:flex-start;align-items:flex-start;gap:8px;padding:8px;border-radius:8px;cursor:pointer;margin-bottom:3px;}
+.dict-def-item:active{background:#eef0ff;}
+.dict-def-text{-webkit-flex:1;flex:1;font-size:0.88rem;color:#444;line-height:1.4;}
+.dict-def-example{font-size:0.8rem;color:#999;font-style:italic;margin-top:2px;}
+.btn-pick{background:#667eea;color:white;border:none;border-radius:8px;padding:6px 12px;font-size:0.8rem;font-weight:600;cursor:pointer;min-height:30px;}
+.dict-loading{text-align:center;color:#aaa;padding:14px;}
+.dict-error{text-align:center;color:#e74c3c;padding:10px;font-size:0.88rem;}
+.word-count{color:#aaa;margin-bottom:8px;font-size:0.85rem;}
+.word-list{max-height:280px;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.word-item{display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;padding:9px 10px;border-bottom:1px solid #f0f0f0;gap:6px;}
+.word-text{-webkit-flex:1;flex:1;}
+.word-text strong{color:#333;font-size:0.95rem;}
+.word-text .def{color:#888;font-size:0.82rem;}
+.speak-btn{background:none;border:none;font-size:1.3rem;cursor:pointer;padding:4px;min-width:34px;min-height:34px;display:-webkit-inline-flex;display:inline-flex;-webkit-align-items:center;align-items:center;-webkit-justify-content:center;justify-content:center;}
+.empty-msg{color:#bbb;font-size:0.95rem;padding:20px 0;text-align:center;}
+.hidden{display:none !important;}
+
+/* 수정 모달 */
+.edit-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.4);z-index:50;display:none;-webkit-align-items:center;align-items:center;-webkit-justify-content:center;justify-content:center;padding:20px;}
+.edit-overlay.show{display:-webkit-flex;display:flex;}
+.edit-modal{background:white;border-radius:18px;padding:24px;width:100%;max-width:380px;text-align:center;}
+.edit-modal h3{font-size:1.15rem;color:#333;margin-bottom:14px;}
+.edit-modal input{width:100%;padding:11px;border:2px solid #e0e0e0;border-radius:10px;font-size:16px;outline:none;margin-bottom:8px;-webkit-appearance:none;appearance:none;}
+.edit-modal input:focus{border-color:#667eea;}
+.edit-modal-btns{display:-webkit-flex;display:flex;gap:10px;-webkit-justify-content:center;justify-content:center;margin-top:6px;}
+
+.ios-speech-banner{
+  position:fixed;bottom:0;left:0;right:0;
+  background:rgba(102,126,234,0.95);color:white;text-align:center;
+  padding:14px;font-size:0.95rem;font-weight:600;z-index:999;cursor:pointer;
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);display:none;
+}
+
+@media(min-width:900px){.hero-panel{width:300px;}.hero-panel svg{width:280px;}}
+@media(max-width:768px){
+  body{-webkit-flex-direction:column;flex-direction:column;}
+  .hero-panel{
+    width:100%;min-height:auto;
+    -webkit-flex-direction:row;flex-direction:row;padding:12px;gap:12px;
+    -webkit-justify-content:flex-start;justify-content:flex-start;
+  }
+  .hero-panel svg{width:120px;height:auto;}
+  .hero-info{display:-webkit-flex;display:flex;-webkit-flex-direction:column;flex-direction:column;-webkit-align-items:flex-start;align-items:flex-start;}
+  .hero-name{font-size:1.1rem;margin-top:0;}
+  .hero-quote{text-align:left;padding:0;font-size:0.78rem;}
+  .hero-nav{margin-top:6px;}
+  .main-area{padding:12px;}
+  .card{padding:18px 14px;}
+  h1{font-size:1.35rem;}
+  .definition{font-size:1.15rem;}
+  #answerInput{width:100%;}
+  .input-area{-webkit-flex-direction:column;flex-direction:column;-webkit-align-items:center;align-items:center;}
+  .manage-layout{-webkit-flex-direction:column;flex-direction:column;}
+  .folder-panel{width:100%;}
+}
+</style>
+</head>
+<body>
+
+<!-- 왼쪽 히어로 패널 -->
+<div class="hero-panel" id="heroPanel">
+  <div id="heroSvg"></div>
+  <div class="hero-info">
+    <div class="hero-name" id="heroName"></div>
+    <div class="hero-quote" id="heroQuote"></div>
+    <div class="hero-nav" id="heroNav"></div>
+  </div>
+</div>
+
+<!-- 커비 오버레이 -->
+<div class="kirby-overlay" id="kirbyOverlay">
+  <div class="kirby-inner" id="kirbyInner">
+    <div class="kirby-speech" id="kirbySpeech"></div>
+    <div id="kirbyWrap"></div>
+    <div class="kirby-type-label" id="kirbyLabel"></div>
+  </div>
+</div>
+
+<!-- 수정 모달 -->
+<div class="edit-overlay" id="editOverlay">
+  <div class="edit-modal">
+    <h3>단어 수정</h3>
+    <input type="text" id="editWord" placeholder="영어 단어" autocapitalize="none" autocorrect="off">
+    <input type="text" id="editDef" placeholder="영어 뜻">
+    <div class="edit-modal-btns">
+      <button class="btn btn-light" onclick="closeEdit()">취소</button>
+      <button class="btn btn-primary" onclick="saveEdit()">저장</button>
+    </div>
+  </div>
+</div>
+
+<div class="ios-speech-banner" id="iosBanner" onclick="initSpeechIOS()">여기를 터치하면 발음 기능이 활성화돼요!</div>
+
+<!-- 메인 영역 -->
+<div class="main-area">
+  <h1>지안이의 영어단어 테스트</h1>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('test')">테스트</button>
+    <button class="tab-btn" onclick="switchTab('manage')">단어 관리</button>
+  </div>
+
+  <div class="card" id="testSection">
+    <div class="settings">
+      <label>폴더: <select id="testFolder"></select></label>
+      <label>문제 수:
+        <select id="questionCount"><option value="5">5</option><option value="10" selected>10</option><option value="15">15</option><option value="20">20</option><option value="0">전체</option></select>
+      </label>
+      <button class="btn btn-primary" style="padding:8px 16px;font-size:0.88rem" onclick="startQuiz()">시작</button>
+    </div>
+    <div id="quizArea" style="display:none">
+      <div class="score-bar"><div>맞음: <span class="score-correct" id="correctCount">0</span></div><div>틀림: <span class="score-wrong" id="wrongCount">0</span></div></div>
+      <div class="question-num" id="questionNum"></div>
+      <div class="definition" id="definition"></div>
+      <div class="hint" id="hintArea"></div>
+      <div class="mic-area">
+        <button class="mic-btn" id="micBtn" onclick="startVoice()"><span id="micIcon">&#127908;</span><div class="mic-timer" id="micTimer"></div></button>
+        <div class="mic-label" id="micLabel">마이크를 눌러 말해보세요</div>
+        <div class="mic-result" id="micResult"></div>
+      </div>
+      <div class="input-area">
+        <input type="text" id="answerInput" placeholder="또는 여기에 타이핑" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false">
+        <button class="btn btn-primary" id="checkBtn" onclick="checkAnswer()">확인</button>
+        <button class="btn btn-green hidden" id="nextBtn" onclick="nextQuestion()">다음</button>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-light" id="hintBtn" onclick="showHint()">힌트</button>
+        <button class="btn btn-orange" id="skipBtn" onclick="skipQuestion()">모르겠어요</button>
+      </div>
+      <div class="result-msg" id="resultMsg"></div>
+    </div>
+    <div class="final-result" id="finalResult"><h2>테스트 완료!</h2><div id="finalKirbyWrap" style="margin:8px 0"></div><div class="final-score" id="finalScore"></div><div class="final-msg" id="finalMsg"></div><button class="btn btn-primary" style="font-size:1.05rem;padding:12px 32px" onclick="startQuiz()">다시 하기</button></div>
+    <div id="noWordsMsg" class="empty-msg" style="display:none">선택한 폴더에 단어가 없어요.<br>단어 관리에서 추가해주세요!</div>
+  </div>
+
+  <div class="card hidden" id="manageSection">
+    <div class="manage-layout">
+      <div class="folder-panel">
+        <button class="btn-today" onclick="createTodayFolder()">+ 오늘 날짜 폴더</button>
+        <div class="new-folder-row"><input type="text" id="newFolderName" placeholder="폴더 이름" onkeydown="if(event.key==='Enter')createFolder()"><button class="btn-folder-add" onclick="createFolder()">+</button></div>
+        <div class="folder-list" id="folderList"></div>
+      </div>
+      <div class="word-panel">
+        <div class="add-row"><input type="text" id="searchWordInput" placeholder="영어 단어 검색" autocapitalize="none" autocorrect="off" spellcheck="false" onkeydown="if(event.key==='Enter')searchDict()"><button class="btn-search" onclick="searchDict()">사전 검색</button></div>
+        <div class="dict-results" id="dictResults"></div>
+        <div class="add-row" style="margin-bottom:12px"><input type="text" id="manualWord" placeholder="단어" style="width:100px" autocapitalize="none" autocorrect="off" spellcheck="false" onkeydown="if(event.key==='Enter')document.getElementById('manualDef').focus()"><input type="text" id="manualDef" placeholder="영어 뜻 직접 입력" style="flex:1;min-width:90px" onkeydown="if(event.key==='Enter')addWordManual()"><button class="btn btn-primary" style="padding:9px 14px;font-size:0.88rem" onclick="addWordManual()">추가</button></div>
+        <div class="word-count" id="wordCount"></div>
+        <div class="word-list" id="wordList"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   히어로 아카데미아 (Safari 호환 - clipPath 제거)
+   ============================================================ */
+var HEROES = [
+  { name: 'DEKU', quote: '"Plus Ultra!"', bg: 'linear-gradient(135deg,#1B8A4E,#2196F3)',
+    svg: '<svg viewBox="0 0 200 280" xmlns="http://www.w3.org/2000/svg"><ellipse cx="100" cy="75" rx="58" ry="52" fill="#1B8A4E"/><ellipse cx="70" cy="45" rx="22" ry="28" fill="#22A65B" transform="rotate(-15,70,45)"/><ellipse cx="130" cy="45" rx="22" ry="28" fill="#22A65B" transform="rotate(15,130,45)"/><ellipse cx="100" cy="38" rx="18" ry="22" fill="#27AE60"/><ellipse cx="55" cy="55" rx="15" ry="20" fill="#1E9B52" transform="rotate(-25,55,55)"/><ellipse cx="145" cy="55" rx="15" ry="20" fill="#1E9B52" transform="rotate(25,145,55)"/><ellipse cx="80" cy="35" rx="14" ry="18" fill="#2ED573" transform="rotate(-10,80,35)"/><ellipse cx="120" cy="35" rx="14" ry="18" fill="#2ED573" transform="rotate(10,120,35)"/><ellipse cx="100" cy="105" rx="42" ry="40" fill="#FDDCB5"/><ellipse cx="100" cy="108" rx="38" ry="36" fill="#FDE8D0"/><ellipse cx="82" cy="100" rx="11" ry="13" fill="white"/><ellipse cx="118" cy="100" rx="11" ry="13" fill="white"/><circle cx="84" cy="101" r="7" fill="#2D8A4E"/><circle cx="120" cy="101" r="7" fill="#2D8A4E"/><circle cx="84" cy="101" r="4" fill="#1B5E35"/><circle cx="120" cy="101" r="4" fill="#1B5E35"/><circle cx="82" cy="97" r="3" fill="white"/><circle cx="118" cy="97" r="3" fill="white"/><circle cx="76" cy="113" r="1.5" fill="#C4956A"/><circle cx="82" cy="116" r="1.5" fill="#C4956A"/><circle cx="88" cy="113" r="1.5" fill="#C4956A"/><circle cx="112" cy="113" r="1.5" fill="#C4956A"/><circle cx="118" cy="116" r="1.5" fill="#C4956A"/><circle cx="124" cy="113" r="1.5" fill="#C4956A"/><path d="M90 125 Q100 134 110 125" stroke="#D35D5D" stroke-width="2.5" fill="none" stroke-linecap="round"/><ellipse cx="68" cy="115" rx="8" ry="5" fill="#FFAAAA" opacity="0.35"/><ellipse cx="132" cy="115" rx="8" ry="5" fill="#FFAAAA" opacity="0.35"/><path d="M58 145 Q100 140 142 145 L148 220 Q100 225 52 220 Z" fill="#2E8B57"/><rect x="88" y="148" width="24" height="8" rx="3" fill="#FECA57"/><ellipse cx="46" cy="185" rx="16" ry="14" fill="#E84393"/><ellipse cx="46" cy="185" rx="12" ry="10" fill="#F368A8"/><ellipse cx="154" cy="185" rx="16" ry="14" fill="#E84393"/><ellipse cx="154" cy="185" rx="12" ry="10" fill="#F368A8"/><path d="M70 155 L65 170 L75 168 L68 185" stroke="#55EFC4" stroke-width="2" fill="none" opacity="0.6"/><path d="M130 155 L135 170 L125 168 L132 185" stroke="#55EFC4" stroke-width="2" fill="none" opacity="0.6"/><text x="100" y="250" text-anchor="middle" font-size="14" fill="white" font-weight="700">DEKU</text></svg>' },
+  { name: 'BAKUGO', quote: '"DIE!"', bg: 'linear-gradient(135deg,#FF6B00,#D63031)',
+    svg: '<svg viewBox="0 0 200 280" xmlns="http://www.w3.org/2000/svg"><circle cx="60" cy="50" r="18" fill="#FFA502" opacity="0.3"/><circle cx="150" cy="40" r="14" fill="#FF6B00" opacity="0.25"/><polygon points="100,8 85,55 115,55" fill="#FECA57"/><polygon points="65,20 60,60 85,50" fill="#FFD93D"/><polygon points="135,20 140,60 115,50" fill="#FFD93D"/><polygon points="45,35 52,70 72,55" fill="#FFA502"/><polygon points="155,35 148,70 128,55" fill="#FFA502"/><polygon points="80,12 75,48 95,42" fill="#FECA57"/><polygon points="120,12 125,48 105,42" fill="#FECA57"/><polygon points="55,50 55,75 75,62" fill="#FFD93D"/><polygon points="145,50 145,75 125,62" fill="#FFD93D"/><ellipse cx="100" cy="105" rx="42" ry="40" fill="#FDDCB5"/><ellipse cx="100" cy="108" rx="38" ry="36" fill="#FDE8D0"/><ellipse cx="80" cy="98" rx="10" ry="9" fill="white"/><ellipse cx="120" cy="98" rx="10" ry="9" fill="white"/><circle cx="82" cy="99" r="6" fill="#E84393"/><circle cx="122" cy="99" r="6" fill="#E84393"/><circle cx="82" cy="99" r="3.5" fill="#B71540"/><circle cx="122" cy="99" r="3.5" fill="#B71540"/><circle cx="80" cy="96" r="2.5" fill="white"/><circle cx="120" cy="96" r="2.5" fill="white"/><path d="M68 86 L92 92" stroke="#2D3436" stroke-width="4" stroke-linecap="round"/><path d="M132 86 L108 92" stroke="#2D3436" stroke-width="4" stroke-linecap="round"/><path d="M82 122 Q100 114 118 122" stroke="#2D3436" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M58 145 Q100 138 142 145 L150 222 Q100 228 50 222 Z" fill="#2D3436"/><path d="M78 145 L78 195" stroke="#FFA502" stroke-width="3"/><path d="M122 145 L122 195" stroke="#FFA502" stroke-width="3"/><circle cx="100" cy="160" r="8" fill="#FFA502"/><ellipse cx="42" cy="185" rx="20" ry="16" fill="#FFA502"/><ellipse cx="42" cy="185" rx="14" ry="11" fill="#FECA57"/><ellipse cx="158" cy="185" rx="20" ry="16" fill="#FFA502"/><ellipse cx="158" cy="185" rx="14" ry="11" fill="#FECA57"/><text x="100" y="250" text-anchor="middle" font-size="14" fill="white" font-weight="700">BAKUGO</text></svg>' },
+  { name: 'TODOROKI', quote: '"It\'s your power."', bg: 'linear-gradient(135deg,#E84393,#74B9FF)',
+    svg: '<svg viewBox="0 0 200 280" xmlns="http://www.w3.org/2000/svg"><ellipse cx="30" cy="80" rx="20" ry="30" fill="#E84393" opacity="0.25"/><ellipse cx="30" cy="75" rx="12" ry="20" fill="#FF6B6B" opacity="0.2"/><polygon points="170,60 164,80 176,82 168,100" fill="#74B9FF" opacity="0.25"/><ellipse cx="75" cy="72" rx="32" ry="48" fill="#E84393"/><ellipse cx="125" cy="72" rx="32" ry="48" fill="#EEEEEE"/><ellipse cx="60" cy="50" rx="16" ry="22" fill="#D63384" transform="rotate(-10,60,50)"/><ellipse cx="140" cy="50" rx="16" ry="22" fill="#F0F0F0" transform="rotate(10,140,50)"/><ellipse cx="80" cy="40" rx="12" ry="18" fill="#E84393"/><ellipse cx="120" cy="40" rx="12" ry="18" fill="#DDD"/><ellipse cx="100" cy="108" rx="42" ry="40" fill="#FDDCB5"/><ellipse cx="100" cy="110" rx="38" ry="36" fill="#FDE8D0"/><path d="M62 90 Q70 80 82 88 Q86 96 82 108 Q76 116 65 112 Q58 104 62 90Z" fill="#E17055" opacity="0.4"/><ellipse cx="80" cy="102" rx="10" ry="12" fill="white"/><ellipse cx="120" cy="102" rx="10" ry="12" fill="white"/><circle cx="81" cy="103" r="6.5" fill="#636E72"/><circle cx="121" cy="103" r="6.5" fill="#74B9FF"/><circle cx="81" cy="103" r="3.5" fill="#2D3436"/><circle cx="121" cy="103" r="3.5" fill="#2980B9"/><circle cx="79" cy="99" r="2.8" fill="white"/><circle cx="119" cy="99" r="2.8" fill="white"/><line x1="90" y1="128" x2="110" y2="128" stroke="#888" stroke-width="2" stroke-linecap="round"/><path d="M58 148 Q100 142 142 148 L148 224 Q100 230 52 224 Z" fill="#2D3436"/><rect x="70" y="175" width="60" height="8" rx="3" fill="#636E72"/><circle cx="100" cy="179" r="5" fill="#B2BEC3"/><text x="100" y="250" text-anchor="middle" font-size="13" fill="white" font-weight="700">TODOROKI</text></svg>' },
+  { name: 'ALL MIGHT', quote: '"I am here!"', bg: 'linear-gradient(135deg,#FECA57,#2980B9)',
+    svg: '<svg viewBox="0 0 200 280" xmlns="http://www.w3.org/2000/svg"><circle cx="100" cy="120" r="95" fill="#FECA57" opacity="0.12"/><polygon points="72,25 60,70 85,58" fill="#FECA57"/><polygon points="128,25 140,70 115,58" fill="#FECA57"/><polygon points="90,15 82,55 100,48" fill="#FFD93D"/><polygon points="110,15 118,55 100,48" fill="#FFD93D"/><polygon points="55,40 52,72 72,60" fill="#F7DC6F"/><polygon points="145,40 148,72 128,60" fill="#F7DC6F"/><polygon points="100,10 94,42 106,42" fill="#FECA57"/><ellipse cx="100" cy="68" rx="48" ry="30" fill="#FECA57"/><rect x="56" y="72" width="88" height="72" rx="20" fill="#FDDCB5"/><rect x="62" y="76" width="76" height="64" rx="16" fill="#FDE8D0"/><ellipse cx="80" cy="95" rx="12" ry="10" fill="white"/><ellipse cx="120" cy="95" rx="12" ry="10" fill="white"/><circle cx="82" cy="96" r="6" fill="#2980B9"/><circle cx="122" cy="96" r="6" fill="#2980B9"/><circle cx="82" cy="96" r="3" fill="#1B4F72"/><circle cx="122" cy="96" r="3" fill="#1B4F72"/><circle cx="80" cy="93" r="2.5" fill="white"/><circle cx="120" cy="93" r="2.5" fill="white"/><path d="M72 118 Q100 145 128 118" stroke="#2D3436" stroke-width="3" fill="white"/><path d="M50 150 Q100 140 150 150 L158 230 Q100 238 42 230 Z" fill="#2980B9"/><rect x="82" y="155" width="36" height="10" rx="4" fill="#FECA57"/><path d="M70 155 Q65 180 68 200" stroke="#FECA57" stroke-width="3" fill="none"/><path d="M130 155 Q135 180 132 200" stroke="#FECA57" stroke-width="3" fill="none"/><ellipse cx="38" cy="185" rx="20" ry="18" fill="#2980B9"/><ellipse cx="38" cy="185" rx="14" ry="12" fill="#FDDCB5"/><ellipse cx="162" cy="185" rx="20" ry="18" fill="#2980B9"/><ellipse cx="162" cy="185" rx="14" ry="12" fill="#FDDCB5"/><text x="100" y="255" text-anchor="middle" font-size="12" fill="white" font-weight="700">ALL MIGHT</text></svg>' },
+  { name: 'URARAKA', quote: '"I\'ll do my best!"', bg: 'linear-gradient(135deg,#FDA7DF,#A29BFE)',
+    svg: '<svg viewBox="0 0 200 280" xmlns="http://www.w3.org/2000/svg"><ellipse cx="100" cy="78" rx="50" ry="42" fill="#8B6914"/><ellipse cx="100" cy="72" rx="46" ry="38" fill="#A0782C"/><ellipse cx="62" cy="82" rx="18" ry="28" fill="#8B6914" transform="rotate(-10,62,82)"/><ellipse cx="138" cy="82" rx="18" ry="28" fill="#8B6914" transform="rotate(10,138,82)"/><ellipse cx="80" cy="62" rx="20" ry="14" fill="#A0782C"/><ellipse cx="120" cy="62" rx="20" ry="14" fill="#A0782C"/><ellipse cx="100" cy="58" rx="16" ry="12" fill="#B08830"/><ellipse cx="100" cy="108" rx="40" ry="38" fill="#FDDCB5"/><ellipse cx="100" cy="110" rx="36" ry="34" fill="#FDE8D0"/><ellipse cx="82" cy="102" rx="11" ry="14" fill="white"/><ellipse cx="118" cy="102" rx="11" ry="14" fill="white"/><circle cx="84" cy="103" r="7.5" fill="#8B4513"/><circle cx="120" cy="103" r="7.5" fill="#8B4513"/><circle cx="84" cy="103" r="4.5" fill="#5D2F0E"/><circle cx="120" cy="103" r="4.5" fill="#5D2F0E"/><circle cx="81" cy="98" r="3.5" fill="white"/><circle cx="117" cy="98" r="3.5" fill="white"/><ellipse cx="68" cy="116" rx="10" ry="6" fill="#FDA7DF" opacity="0.5"/><ellipse cx="132" cy="116" rx="10" ry="6" fill="#FDA7DF" opacity="0.5"/><path d="M90 125 Q100 136 110 125" stroke="#D35D5D" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M60 148 Q100 142 140 148 L146 224 Q100 230 54 224 Z" fill="#2D3436"/><ellipse cx="48" cy="182" rx="14" ry="12" fill="#FDDCB5"/><circle cx="48" cy="192" r="4" fill="#FDA7DF"/><ellipse cx="152" cy="182" rx="14" ry="12" fill="#FDDCB5"/><circle cx="152" cy="192" r="4" fill="#FDA7DF"/><text x="100" y="250" text-anchor="middle" font-size="12" fill="white" font-weight="700">URARAKA</text></svg>' },
+  { name: 'TSUYU', quote: '"Kero kero~"', bg: 'linear-gradient(135deg,#00B894,#6C5CE7)',
+    svg: '<svg viewBox="0 0 200 280" xmlns="http://www.w3.org/2000/svg"><ellipse cx="100" cy="75" rx="52" ry="46" fill="#00815A"/><path d="M48 75 Q42 140 50 200" fill="#00815A"/><path d="M152 75 Q158 140 150 200" fill="#00815A"/><ellipse cx="58" cy="130" rx="14" ry="50" fill="#00815A"/><ellipse cx="142" cy="130" rx="14" ry="50" fill="#00815A"/><ellipse cx="100" cy="48" rx="22" ry="18" fill="#00996B"/><ellipse cx="74" cy="50" rx="16" ry="20" fill="#00996B" transform="rotate(-8,74,50)"/><ellipse cx="126" cy="50" rx="16" ry="20" fill="#00996B" transform="rotate(8,126,50)"/><polygon points="100,55 88,45 88,65" fill="#FF6B81"/><polygon points="100,55 112,45 112,65" fill="#FF6B81"/><circle cx="100" cy="55" r="5" fill="#E84393"/><ellipse cx="100" cy="108" rx="42" ry="40" fill="#B8E6C8"/><ellipse cx="100" cy="110" rx="38" ry="36" fill="#D0F0DC"/><ellipse cx="78" cy="100" rx="14" ry="16" fill="white"/><ellipse cx="122" cy="100" rx="14" ry="16" fill="white"/><circle cx="80" cy="102" r="9" fill="#2D3436"/><circle cx="124" cy="102" r="9" fill="#2D3436"/><circle cx="77" cy="97" r="4.5" fill="white"/><circle cx="121" cy="97" r="4.5" fill="white"/><ellipse cx="62" cy="115" rx="8" ry="5" fill="#FF9AA2" opacity="0.4"/><ellipse cx="138" cy="115" rx="8" ry="5" fill="#FF9AA2" opacity="0.4"/><path d="M82 125 Q100 118 118 125" stroke="#636E72" stroke-width="2" fill="none"/><path d="M58 148 Q100 142 142 148 L146 226 Q100 232 54 226 Z" fill="#00815A"/><ellipse cx="78" cy="74" rx="14" ry="10" fill="none" stroke="#FECA57" stroke-width="3"/><ellipse cx="122" cy="74" rx="14" ry="10" fill="none" stroke="#FECA57" stroke-width="3"/><line x1="92" y1="74" x2="108" y2="74" stroke="#FECA57" stroke-width="3"/><text x="100" y="250" text-anchor="middle" font-size="13" fill="white" font-weight="700">TSUYU</text></svg>' }
+];
+
+var currentHeroIdx = 0;
+function setHero(idx) {
+  currentHeroIdx = idx;
+  var h = HEROES[idx];
+  document.body.style.background = h.bg;
+  document.getElementById('heroSvg').innerHTML = h.svg;
+  document.getElementById('heroName').textContent = h.name;
+  document.getElementById('heroQuote').textContent = h.quote;
+  var dots = document.querySelectorAll('.hero-dot');
+  for (var i = 0; i < dots.length; i++) {
+    if (i === idx) dots[i].className = 'hero-dot active';
+    else dots[i].className = 'hero-dot';
+  }
+}
+function changeHero() { setHero((currentHeroIdx + 1) % HEROES.length); }
+function initHeroNav() {
+  var html = '';
+  for (var i = 0; i < HEROES.length; i++) {
+    html += '<div class="hero-dot' + (i === 0 ? ' active' : '') + '" onclick="setHero(' + i + ')"></div>';
+  }
+  document.getElementById('heroNav').innerHTML = html;
+  setHero(0);
+}
+
+/* ============================================================
+   커비 (Safari 호환 - var 사용, optional chaining 제거)
+   ============================================================ */
+var KIRBY_MAP = {fire:'fire',sun:'fire',light:'fire',hot:'fire',burn:'fire',ice:'ice',cold:'ice',snow:'ice',winter:'ice',water:'ice',rain:'ice',bird:'wing',fly:'wing',wing:'wing',sky:'wing',apple:'cook',eat:'cook',food:'cook',cook:'cook',milk:'cook',bread:'cook',cake:'cook',dog:'animal',cat:'animal',fish:'animal',animal:'animal',pet:'animal',mouse:'animal',run:'sword',fight:'sword',sword:'sword',hero:'sword',brave:'sword',strong:'sword',sleep:'sleep',dream:'sleep',night:'sleep',bed:'sleep',star:'star',moon:'star',space:'star',rocket:'star',sing:'music',music:'music',song:'music',dance:'music',flower:'nature',tree:'nature',garden:'nature',plant:'nature',leaf:'nature',happy:'heart',love:'heart',smile:'heart',friend:'heart',family:'heart',kind:'heart',book:'scholar',school:'scholar',read:'scholar',study:'scholar',learn:'scholar',play:'sport',jump:'sport',ball:'sport',swim:'sport',game:'sport'};
+var KIRBY_LABELS = {default:'커비',fire:'파이어 커비',ice:'아이스 커비',wing:'윙 커비',cook:'쿡 커비',animal:'애니멀 커비',sword:'소드 커비',sleep:'슬립 커비',star:'스타 커비',music:'마이크 커비',nature:'리프 커비',heart:'하트 커비',scholar:'스칼라 커비',sport:'파이터 커비'};
+
+function getKirbyType(w) {
+  w = w.toLowerCase();
+  if (KIRBY_MAP[w]) return KIRBY_MAP[w];
+  var keys = Object.keys(KIRBY_MAP);
+  for (var i = 0; i < keys.length; i++) {
+    if (w.indexOf(keys[i]) >= 0 || keys[i].indexOf(w) >= 0) return KIRBY_MAP[keys[i]];
+  }
+  var types = Object.keys(KIRBY_LABELS);
+  var h = 0;
+  for (var j = 0; j < w.length; j++) h = ((h << 5) - h) + w.charCodeAt(j);
+  return types[Math.abs(h) % types.length];
+}
+
+function kirbyBase(ok) {
+  var ey = ok ? '<ellipse cx="64" cy="62" rx="5.5" ry="7.5" fill="#2D3436"/><ellipse cx="92" cy="62" rx="5.5" ry="7.5" fill="#2D3436"/><ellipse cx="62" cy="59" rx="2.2" ry="2.8" fill="white"/><ellipse cx="90" cy="59" rx="2.2" ry="2.8" fill="white"/>' : '<ellipse cx="64" cy="65" rx="5" ry="6" fill="#2D3436"/><ellipse cx="92" cy="65" rx="5" ry="6" fill="#2D3436"/><ellipse cx="62" cy="62" rx="2" ry="2.5" fill="white"/><ellipse cx="90" cy="62" rx="2" ry="2.5" fill="white"/><ellipse cx="64" cy="75" rx="3" ry="4" fill="#74B9FF" opacity="0.7"/><ellipse cx="92" cy="75" rx="3" ry="4" fill="#74B9FF" opacity="0.7"/>';
+  var mo = ok ? '<path d="M68 82 Q78 94 88 82" stroke="#D63031" stroke-width="2.5" fill="none" stroke-linecap="round"/>' : '<path d="M68 90 Q78 78 88 90" stroke="#D63031" stroke-width="2.5" fill="none" stroke-linecap="round"/>';
+  return '<ellipse cx="78" cy="78" rx="48" ry="46" fill="#FFB8D0"/><ellipse cx="78" cy="80" rx="44" ry="42" fill="#FFC5D3"/><ellipse cx="55" cy="118" rx="16" ry="8" fill="#E84393" transform="rotate(-10,55,118)"/><ellipse cx="101" cy="118" rx="16" ry="8" fill="#E84393" transform="rotate(10,101,118)"/><ellipse cx="30" cy="85" rx="14" ry="10" fill="#FFB8D0" transform="rotate(-30,30,85)"/><ellipse cx="126" cy="85" rx="14" ry="10" fill="#FFB8D0" transform="rotate(30,126,85)"/>' + ey + '<ellipse cx="50" cy="80" rx="8" ry="5" fill="#FF6B81" opacity="0.4"/><ellipse cx="106" cy="80" rx="8" ry="5" fill="#FF6B81" opacity="0.4"/>' + mo;
+}
+
+var KIRBY_ACC = {
+  fire: '<g transform="translate(58,8)"><ellipse cx="20" cy="28" rx="14" ry="18" fill="#FF6B6B"/><ellipse cx="20" cy="24" rx="9" ry="14" fill="#FECA57"/><ellipse cx="20" cy="20" rx="5" ry="9" fill="#FFF"/></g>',
+  ice: '<g transform="translate(52,10)"><polygon points="26,0 30,18 42,18 32,28 36,42 26,34 16,42 20,28 10,18 22,18" fill="#74B9FF" opacity="0.9"/><circle cx="26" cy="18" r="3" fill="white" opacity="0.8"/></g>',
+  wing: '<g><path d="M20 70 Q-5 40 15 20 Q25 30 30 55Z" fill="#FFEAA7" opacity="0.9"/><path d="M136 70 Q161 40 141 20 Q131 30 126 55Z" fill="#FFEAA7" opacity="0.9"/></g>',
+  cook: '<g transform="translate(42,0)"><ellipse cx="36" cy="32" rx="34" ry="16" fill="white"/><ellipse cx="36" cy="20" rx="26" ry="18" fill="white"/><ellipse cx="36" cy="12" rx="16" ry="14" fill="white"/></g>',
+  animal: '<g><ellipse cx="50" cy="28" rx="12" ry="16" fill="#FDCB6E" transform="rotate(-20,50,28)"/><ellipse cx="106" cy="28" rx="12" ry="16" fill="#FDCB6E" transform="rotate(20,106,28)"/><circle cx="78" cy="72" r="5" fill="#2D3436"/></g>',
+  sword: '<g transform="translate(118,30) rotate(30)"><rect x="-3" y="-45" width="6" height="40" fill="#BDC3C7" rx="2"/><polygon points="-1,-48 3,-48 1,-56" fill="#BDC3C7"/><rect x="-10" y="-8" width="20" height="6" fill="#FECA57" rx="2"/></g>',
+  sleep: '<g><path d="M46 38 Q78 12 110 38" fill="#A29BFE"/><ellipse cx="78" cy="38" rx="34" ry="10" fill="#A29BFE"/><circle cx="78" cy="10" r="8" fill="#DFE6E9"/></g>',
+  star: '<g transform="translate(56,-2)"><polygon points="22,0 28,16 46,16 32,26 37,44 22,34 7,44 12,26 -2,16 16,16" fill="#FECA57"/></g>',
+  music: '<g transform="translate(115,50)"><rect x="0" y="-40" width="4" height="40" fill="#636E72" rx="1"/><circle cx="2" cy="0" r="8" fill="#2D3436"/></g>',
+  nature: '<g transform="translate(52,6)"><ellipse cx="26" cy="20" rx="18" ry="14" fill="#00B894"/><ellipse cx="10" cy="26" rx="14" ry="10" fill="#55EFC4" transform="rotate(-20,10,26)"/><ellipse cx="42" cy="26" rx="14" ry="10" fill="#55EFC4" transform="rotate(20,42,26)"/><circle cx="26" cy="18" r="5" fill="#FD79A8"/></g>',
+  heart: '<g><g transform="translate(62,4) scale(0.7)"><path d="M20 8 Q20 0 12 0 Q0 0 0 12 Q0 20 20 32 Q40 20 40 12 Q40 0 28 0 Q20 0 20 8Z" fill="#E84393"/></g></g>',
+  scholar: '<g transform="translate(40,12)"><rect x="8" y="16" width="60" height="6" fill="#2D3436"/><polygon points="38,0 8,16 68,16" fill="#2D3436"/></g>',
+  sport: '<g transform="translate(54,2)"><rect x="16" y="0" width="16" height="6" fill="#E84393" rx="2"/><rect x="8" y="6" width="32" height="20" fill="#E17055"/></g>'
+};
+
+function renderKirby(t, ok) {
+  var acc = KIRBY_ACC[t] || KIRBY_ACC.star;
+  return '<svg viewBox="0 0 156 130" width="180" height="155" xmlns="http://www.w3.org/2000/svg">' + acc + kirbyBase(ok) + '</svg>';
+}
+
+var kirbyTm = null;
+function showKirby(w, ok) {
+  var t = getKirbyType(w);
+  var label = KIRBY_LABELS[t] || KIRBY_LABELS['default'];
+  var ov = document.getElementById('kirbyOverlay');
+  var inner = document.getElementById('kirbyInner');
+  document.getElementById('kirbyWrap').innerHTML = renderKirby(t, ok);
+  document.getElementById('kirbySpeech').textContent = ok ? 'Great!' : 'Oh no!';
+  document.getElementById('kirbySpeech').className = 'kirby-speech ' + (ok ? 'great' : 'ohno');
+  document.getElementById('kirbyLabel').textContent = label;
+  inner.className = 'kirby-inner';
+  inner.offsetWidth; // reflow
+  inner.className = 'kirby-inner ' + (ok ? 'bounce' : 'sad');
+  ov.className = 'kirby-overlay show';
+  clearTimeout(kirbyTm);
+  kirbyTm = setTimeout(function() { ov.className = 'kirby-overlay'; }, ok ? 2600 : 1600);
+}
+
+/* ============================================================
+   iOS 음성 합성
+   ============================================================ */
+var speechReady = false;
+var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+function initSpeechIOS() {
+  var u = new SpeechSynthesisUtterance('');
+  u.volume = 0;
+  speechSynthesis.speak(u);
+  speechReady = true;
+  document.getElementById('iosBanner').style.display = 'none';
+}
+
+if (isIOS) {
+  document.getElementById('iosBanner').style.display = 'block';
+  document.addEventListener('touchstart', function h() {
+    if (!speechReady) initSpeechIOS();
+    document.removeEventListener('touchstart', h);
+  }, false);
+} else {
+  speechReady = true;
+}
+
+function speak(t) {
+  speechSynthesis.cancel();
+  var u = new SpeechSynthesisUtterance(t);
+  u.lang = 'en-US'; u.rate = 0.85; u.pitch = 1.1;
+  speechSynthesis.speak(u);
+}
+
+/* ============================================================
+   음성 인식 (Safari 호환)
+   ============================================================ */
+var SR = window.SpeechRecognition || window.webkitSpeechRecognition || null;
+var recog = null, voiceTm = null;
+
+function startVoice() {
+  if (answered) return;
+  if (!SR) { alert('이 브라우저에서 음성 인식이 지원되지 않아요.\n타이핑으로 답변해주세요!'); return; }
+  if (recog) { try { recog.abort(); } catch(e) {} recog = null; }
+
+  recog = new SR();
+  recog.lang = 'en-US';
+  recog.continuous = false;
+  recog.interimResults = true;
+  recog.maxAlternatives = 3;
+
+  var mb = document.getElementById('micBtn');
+  var ml = document.getElementById('micLabel');
+  var mr = document.getElementById('micResult');
+  var mt = document.getElementById('micTimer');
+
+  mb.classList.add('listening');
+  mt.classList.add('active');
+  mt.style.cssText = '';
+  ml.textContent = '듣고 있어요...';
+  mr.textContent = '';
+
+  var ft = '';
+
+  recog.onresult = function(e) {
+    var im = '';
+    for (var i = e.resultIndex; i < e.results.length; i++) {
+      var t = e.results[i][0].transcript;
+      if (e.results[i].isFinal) ft = t; else im = t;
+    }
+    mr.textContent = ft || im;
+  };
+
+  recog.onend = function() {
+    mb.classList.remove('listening');
+    mt.classList.remove('active');
+    clearTimeout(voiceTm);
+    if (ft && !answered) {
+      document.getElementById('answerInput').value = ft;
+      checkAnswer();
+    } else if (!answered) {
+      ml.textContent = '인식 실패 - 다시 시도하세요';
+    }
+    recog = null;
+  };
+
+  recog.onerror = function() {
+    mb.classList.remove('listening');
+    mt.classList.remove('active');
+    ml.textContent = '다시 시도하세요';
+    recog = null;
+  };
+
+  recog.start();
+  clearTimeout(voiceTm);
+  voiceTm = setTimeout(function() {
+    if (recog) try { recog.stop(); } catch(e) {}
+  }, 5000);
+}
+
+/* ============================================================
+   데이터 (Safari 호환 - var, no optional chaining)
+   ============================================================ */
+var STORAGE_KEY = 'jian_vocab_v2';
+var DEFAULT_WORDS = [
+  {word:"apple",definition:"A round fruit with red or green skin"},
+  {word:"happy",definition:"Feeling pleased and satisfied"},
+  {word:"run",definition:"To move quickly using your legs"},
+  {word:"book",definition:"A set of printed pages that you read"},
+  {word:"water",definition:"A clear liquid that you drink"},
+  {word:"friend",definition:"A person you like and enjoy spending time with"},
+  {word:"school",definition:"A place where children go to learn"},
+  {word:"big",definition:"Large in size"},
+  {word:"eat",definition:"To put food in your mouth and swallow it"},
+  {word:"sun",definition:"The bright star in the sky during the day"},
+  {word:"dog",definition:"A common pet animal that barks"},
+  {word:"cat",definition:"A small pet animal that says meow"},
+  {word:"tree",definition:"A tall plant with a trunk and branches"},
+  {word:"sleep",definition:"To rest with your eyes closed at night"},
+  {word:"smile",definition:"To make a happy expression with your mouth"},
+  {word:"rain",definition:"Water falling from clouds in the sky"},
+  {word:"house",definition:"A building where people live"},
+  {word:"sing",definition:"To make music with your voice"},
+  {word:"flower",definition:"The colorful part of a plant that blooms"},
+  {word:"jump",definition:"To push yourself up into the air using your legs"},
+  {word:"star",definition:"A small bright light you see in the night sky"},
+  {word:"bird",definition:"An animal with wings and feathers that can fly"},
+  {word:"cold",definition:"Having a low temperature, not warm"},
+  {word:"family",definition:"A group of people related to each other like parents and children"},
+  {word:"milk",definition:"A white drink that comes from cows"},
+  {word:"fish",definition:"An animal that lives in water and has fins"},
+  {word:"small",definition:"Little in size, not big"},
+  {word:"play",definition:"To do something fun, like games or sports"},
+  {word:"light",definition:"Something that lets you see in the dark"}
+];
+var DEFAULT_DATA = {folders:[{name:'기본 단어',words:DEFAULT_WORDS}]};
+
+function loadData() {
+  try {
+    var s = localStorage.getItem(STORAGE_KEY);
+    if (s) return JSON.parse(s);
+    var old = localStorage.getItem('jian_vocab_words');
+    if (old) {
+      var d = {folders:[{name:'기본 단어',words:JSON.parse(old)}]};
+      saveData(d); return d;
+    }
+  } catch(e) {}
+  saveData(DEFAULT_DATA);
+  return JSON.parse(JSON.stringify(DEFAULT_DATA));
+}
+function saveData(d) { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(d)); } catch(e) {} }
+
+var data = loadData();
+var activeFolderIdx = 0;
+var quizWords = [], currentIndex = 0, correctTotal = 0, wrongTotal = 0, hintLevel = 0, answered = false;
+
+/* 테스트 */
+function populateTestFolderSelect() {
+  var s = document.getElementById('testFolder');
+  var html = '<option value="__all__">전체</option>';
+  for (var i = 0; i < data.folders.length; i++) {
+    html += '<option value="' + i + '">' + esc(data.folders[i].name) + ' (' + data.folders[i].words.length + ')</option>';
+  }
+  s.innerHTML = html;
+}
+
+function getTestWords() {
+  var v = document.getElementById('testFolder').value;
+  if (v === '__all__') {
+    var all = [];
+    for (var i = 0; i < data.folders.length; i++) {
+      all = all.concat(data.folders[i].words);
+    }
+    return all;
+  }
+  var idx = parseInt(v);
+  if (idx >= 0 && idx < data.folders.length) return data.folders[idx].words;
+  return [];
+}
+
+function startQuiz() {
+  var aw = getTestWords();
+  if (!aw.length) {
+    document.getElementById('quizArea').style.display = 'none';
+    document.getElementById('finalResult').style.display = 'none';
+    document.getElementById('noWordsMsg').style.display = 'block';
+    return;
+  }
+  document.getElementById('noWordsMsg').style.display = 'none';
+  var cs = document.getElementById('questionCount').value;
+  var cnt = cs === '0' ? aw.length : Math.min(parseInt(cs), aw.length);
+  quizWords = aw.slice().sort(function() { return Math.random() - 0.5; }).slice(0, cnt);
+  currentIndex = 0; correctTotal = 0; wrongTotal = 0;
+  document.getElementById('quizArea').style.display = 'block';
+  document.getElementById('finalResult').style.display = 'none';
+  document.getElementById('correctCount').textContent = '0';
+  document.getElementById('wrongCount').textContent = '0';
+  showQuestion();
+}
+
+function showQuestion() {
+  answered = false; hintLevel = 0;
+  changeHero();
+  var q = quizWords[currentIndex];
+  document.getElementById('questionNum').textContent = (currentIndex + 1) + ' / ' + quizWords.length;
+  document.getElementById('definition').textContent = q.definition;
+  document.getElementById('hintArea').textContent = '';
+  document.getElementById('resultMsg').textContent = '';
+  document.getElementById('resultMsg').className = 'result-msg';
+  document.getElementById('micLabel').textContent = '마이크를 눌러 말해보세요';
+  document.getElementById('micResult').textContent = '';
+  document.getElementById('micBtn').classList.remove('listening');
+  document.getElementById('micTimer').classList.remove('active');
+  var inp = document.getElementById('answerInput');
+  inp.value = ''; inp.className = ''; inp.disabled = false;
+  if (!isIOS) inp.focus();
+  document.getElementById('checkBtn').classList.remove('hidden');
+  document.getElementById('nextBtn').classList.add('hidden');
+  document.getElementById('hintBtn').classList.remove('hidden');
+  document.getElementById('skipBtn').classList.remove('hidden');
+}
+
+function showHint() {
+  var w = quizWords[currentIndex].word;
+  hintLevel++;
+  var h = '';
+  var blanks = '';
+  for (var i = 0; i < w.length; i++) blanks += '_ ';
+  blanks = blanks.trim();
+  if (hintLevel === 1) h = blanks + '  (' + w.length + '글자)';
+  else if (hintLevel === 2) {
+    var b2 = w[0] + ' ';
+    for (var j = 1; j < w.length; j++) b2 += '_ ';
+    h = b2.trim() + '  (' + w.length + '글자)';
+  } else {
+    var b3 = w.substring(0, 2) + ' ';
+    for (var k = 2; k < w.length; k++) b3 += '_ ';
+    h = b3.trim() + '  (' + w.length + '글자)';
+  }
+  document.getElementById('hintArea').textContent = h;
+}
+
+function checkAnswer() {
+  if (answered) return;
+  var inp = document.getElementById('answerInput');
+  var ua = inp.value.trim().toLowerCase();
+  var ca = quizWords[currentIndex].word.toLowerCase();
+  if (!ua) { inp.focus(); return; }
+  answered = true;
+  if (recog) try { recog.abort(); } catch(e) {}
+  var msg = document.getElementById('resultMsg');
+  var ok = (ua === ca);
+  if (ok) {
+    correctTotal++;
+    document.getElementById('correctCount').textContent = correctTotal;
+    inp.className = 'correct';
+    msg.textContent = '정답이에요!';
+    msg.className = 'result-msg correct';
+  } else {
+    wrongTotal++;
+    document.getElementById('wrongCount').textContent = wrongTotal;
+    inp.className = 'wrong';
+    msg.innerHTML = '정답은 <strong>' + esc(quizWords[currentIndex].word) + '</strong>';
+    msg.className = 'result-msg wrong';
+  }
+  showKirby(quizWords[currentIndex].word, ok);
+  speak(quizWords[currentIndex].word);
+  inp.disabled = true;
+  document.getElementById('checkBtn').classList.add('hidden');
+  document.getElementById('hintBtn').classList.add('hidden');
+  document.getElementById('skipBtn').classList.add('hidden');
+  if (currentIndex < quizWords.length - 1) document.getElementById('nextBtn').classList.remove('hidden');
+  else setTimeout(showFinalResult, 2600);
+}
+
+function skipQuestion() {
+  if (answered) return;
+  answered = true;
+  if (recog) try { recog.abort(); } catch(e) {}
+  wrongTotal++;
+  document.getElementById('wrongCount').textContent = wrongTotal;
+  var inp = document.getElementById('answerInput');
+  inp.className = 'wrong'; inp.disabled = true;
+  document.getElementById('resultMsg').innerHTML = '정답은 <strong>' + esc(quizWords[currentIndex].word) + '</strong>';
+  document.getElementById('resultMsg').className = 'result-msg wrong';
+  showKirby(quizWords[currentIndex].word, false);
+  speak(quizWords[currentIndex].word);
+  document.getElementById('checkBtn').classList.add('hidden');
+  document.getElementById('hintBtn').classList.add('hidden');
+  document.getElementById('skipBtn').classList.add('hidden');
+  if (currentIndex < quizWords.length - 1) document.getElementById('nextBtn').classList.remove('hidden');
+  else setTimeout(showFinalResult, 2000);
+}
+
+function nextQuestion() { currentIndex++; showQuestion(); }
+
+function showFinalResult() {
+  document.getElementById('quizArea').style.display = 'none';
+  document.getElementById('finalResult').style.display = 'block';
+  var total = quizWords.length;
+  var pct = Math.round((correctTotal / total) * 100);
+  document.getElementById('finalScore').textContent = correctTotal + ' / ' + total + ' (' + pct + '%)';
+  var m = '';
+  if (pct === 100) m = '완벽해요! 최고!';
+  else if (pct >= 80) m = '정말 잘했어요!';
+  else if (pct >= 60) m = '조금만 더 연습해요!';
+  else m = '다시 도전해봐요!';
+  document.getElementById('finalMsg').textContent = m;
+  document.getElementById('finalKirbyWrap').innerHTML = renderKirby('heart', pct >= 50);
+}
+
+document.getElementById('answerInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') {
+    if (answered) { if (currentIndex < quizWords.length - 1) nextQuestion(); }
+    else checkAnswer();
+  }
+});
+
+/* 폴더 */
+function todayStr() {
+  var d = new Date();
+  var m = d.getMonth() + 1;
+  var day = d.getDate();
+  return d.getFullYear() + '-' + (m < 10 ? '0' + m : m) + '-' + (day < 10 ? '0' + day : day);
+}
+function createTodayFolder() {
+  var n = todayStr();
+  for (var i = 0; i < data.folders.length; i++) {
+    if (data.folders[i].name === n) { activeFolderIdx = i; renderManage(); return; }
+  }
+  data.folders.unshift({name: n, words: []});
+  saveData(data); activeFolderIdx = 0; renderManage();
+}
+function createFolder() {
+  var inp = document.getElementById('newFolderName');
+  var n = inp.value.trim();
+  if (!n) return;
+  for (var i = 0; i < data.folders.length; i++) {
+    if (data.folders[i].name === n) { alert('같은 이름의 폴더가 있어요!'); return; }
+  }
+  data.folders.unshift({name: n, words: []});
+  saveData(data); activeFolderIdx = 0; inp.value = ''; renderManage();
+}
+function deleteFolder(idx) {
+  if (data.folders.length <= 1) { alert('최소 1개 폴더는 있어야 해요!'); return; }
+  if (!confirm('"' + data.folders[idx].name + '" 폴더를 삭제할까요?')) return;
+  data.folders.splice(idx, 1);
+  if (activeFolderIdx >= data.folders.length) activeFolderIdx = data.folders.length - 1;
+  saveData(data); renderManage();
+}
+function selectFolder(idx) { activeFolderIdx = idx; renderManage(); }
+function renderFolderList() {
+  var html = '';
+  for (var i = 0; i < data.folders.length; i++) {
+    var f = data.folders[i];
+    html += '<div class="folder-item ' + (i === activeFolderIdx ? 'active' : '') + '" onclick="selectFolder(' + i + ')"><span class="folder-name">' + esc(f.name) + '</span><span class="folder-count">' + f.words.length + '</span><button class="btn-folder-del" onclick="event.stopPropagation();deleteFolder(' + i + ')">&times;</button></div>';
+  }
+  document.getElementById('folderList').innerHTML = html;
+}
+
+/* 사전 */
+function searchDict() {
+  var inp = document.getElementById('searchWordInput');
+  var w = inp.value.trim().toLowerCase();
+  if (!w) return;
+  inp.blur();
+  var b = document.getElementById('dictResults');
+  b.style.display = 'block';
+  b.innerHTML = '<div class="dict-loading">검색 중...</div>';
+
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', 'https://api.dictionaryapi.dev/api/v2/entries/en/' + encodeURIComponent(w), true);
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      try { renderDictResults(w, JSON.parse(xhr.responseText)); }
+      catch(e) { b.innerHTML = '<div class="dict-error">오류가 발생했어요.</div>'; }
+    } else {
+      b.innerHTML = '<div class="dict-error">단어를 찾을 수 없어요. 철자를 확인해주세요!</div>';
+    }
+  };
+  xhr.onerror = function() {
+    b.innerHTML = '<div class="dict-error">네트워크 오류. 인터넷 연결을 확인해주세요!</div>';
+  };
+  xhr.send();
+}
+
+function renderDictResults(word, entries) {
+  var b = document.getElementById('dictResults');
+  var e = entries[0];
+  var ph = e.phonetic || '';
+  if (!ph && e.phonetics) {
+    for (var p = 0; p < e.phonetics.length; p++) {
+      if (e.phonetics[p].text) { ph = e.phonetics[p].text; break; }
+    }
+  }
+  var h = '<div class="dict-word-title">' + esc(word) + ' <button class="speak-btn" onclick="speak(\'' + esc(word) + '\')">&#128264;</button></div>';
+  if (ph) h += '<div class="dict-phonetic">' + esc(ph) + '</div>';
+  for (var mi = 0; mi < e.meanings.length; mi++) {
+    var m = e.meanings[mi];
+    h += '<div class="dict-entry"><div class="dict-pos">' + esc(m.partOfSpeech) + '</div>';
+    var defs = m.definitions.slice(0, 5);
+    for (var di = 0; di < defs.length; di++) {
+      var d = defs[di];
+      h += '<div class="dict-def-item" data-word="' + esc(word) + '" data-def="' + esc(d.definition) + '" onclick="pickDefinition(\'' + esc(word) + '\',this)"><div><div class="dict-def-text">' + esc(d.definition) + '</div>';
+      if (d.example) h += '<div class="dict-def-example">"' + esc(d.example) + '"</div>';
+      h += '</div><button class="btn-pick">선택</button></div>';
+    }
+    h += '</div>';
+  }
+  b.innerHTML = h;
+}
+
+function pickDefinition(word, el) {
+  var def = el.getAttribute('data-def');
+  var f = data.folders[activeFolderIdx];
+  for (var i = 0; i < f.words.length; i++) {
+    if (f.words[i].word.toLowerCase() === word.toLowerCase()) { alert('이미 있는 단어예요!'); return; }
+  }
+  f.words.push({word: word, definition: def});
+  saveData(data); renderWordList(); renderFolderList();
+  el.style.background = '#e8ffe8';
+  var bt = el.querySelector('.btn-pick');
+  bt.textContent = '추가됨!'; bt.style.background = '#27ae60';
+  setTimeout(function() { el.style.background = ''; bt.textContent = '선택'; bt.style.background = ''; }, 1200);
+}
+
+/* 단어 관리 */
+function addWordManual() {
+  var wI = document.getElementById('manualWord');
+  var dI = document.getElementById('manualDef');
+  var w = wI.value.trim(), d = dI.value.trim();
+  if (!w || !d) { alert('단어와 뜻을 모두 입력해주세요!'); return; }
+  var f = data.folders[activeFolderIdx];
+  for (var i = 0; i < f.words.length; i++) {
+    if (f.words[i].word.toLowerCase() === w.toLowerCase()) { alert('이미 있는 단어예요!'); return; }
+  }
+  f.words.push({word: w, definition: d});
+  saveData(data); wI.value = ''; dI.value = ''; wI.blur(); dI.blur();
+  renderWordList(); renderFolderList();
+}
+
+function deleteWord(idx) {
+  data.folders[activeFolderIdx].words.splice(idx, 1);
+  saveData(data); renderWordList(); renderFolderList();
+}
+
+var editIdx = -1;
+function openEdit(idx) {
+  editIdx = idx;
+  var w = data.folders[activeFolderIdx].words[idx];
+  document.getElementById('editWord').value = w.word;
+  document.getElementById('editDef').value = w.definition;
+  document.getElementById('editOverlay').classList.add('show');
+}
+function closeEdit() { document.getElementById('editOverlay').classList.remove('show'); editIdx = -1; }
+function saveEdit() {
+  var w = document.getElementById('editWord').value.trim();
+  var d = document.getElementById('editDef').value.trim();
+  if (!w || !d) { alert('단어와 뜻을 모두 입력해주세요!'); return; }
+  data.folders[activeFolderIdx].words[editIdx] = {word: w, definition: d};
+  saveData(data); closeEdit(); renderWordList(); renderFolderList();
+}
+
+function renderWordList() {
+  var f = data.folders[activeFolderIdx];
+  var list = document.getElementById('wordList');
+  document.getElementById('wordCount').textContent = f.name + ' — ' + f.words.length + '개 단어';
+  if (!f.words.length) { list.innerHTML = '<div class="empty-msg">단어를 추가해주세요!</div>'; return; }
+  var html = '';
+  for (var i = 0; i < f.words.length; i++) {
+    var w = f.words[i];
+    html += '<div class="word-item"><div class="word-text"><strong>' + esc(w.word) + '</strong> <button class="speak-btn" onclick="speak(\'' + esc(w.word) + '\')">&#128264;</button><br><span class="def">' + esc(w.definition) + '</span></div><button class="btn-edit" onclick="openEdit(' + i + ')">수정</button><button class="btn-danger" onclick="deleteWord(' + i + ')">삭제</button></div>';
+  }
+  list.innerHTML = html;
+}
+function renderManage() { renderFolderList(); renderWordList(); }
+
+/* 탭 */
+function switchTab(tab) {
+  var btns = document.querySelectorAll('.tab-btn');
+  for (var i = 0; i < btns.length; i++) {
+    if ((tab === 'test' && i === 0) || (tab === 'manage' && i === 1)) btns[i].classList.add('active');
+    else btns[i].classList.remove('active');
+  }
+  if (tab === 'test') {
+    document.getElementById('testSection').classList.remove('hidden');
+    document.getElementById('manageSection').classList.add('hidden');
+    data = loadData(); populateTestFolderSelect();
+  } else {
+    document.getElementById('testSection').classList.add('hidden');
+    document.getElementById('manageSection').classList.remove('hidden');
+    data = loadData(); renderManage();
+  }
+  document.querySelector('.main-area').scrollTop = 0;
+}
+
+function esc(s) {
+  var d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+/* 초기화 */
+initHeroNav();
+populateTestFolderSelect();
+</script>
+</body>
+</html>
