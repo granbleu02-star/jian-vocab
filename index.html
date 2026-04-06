@@ -645,51 +645,12 @@ if (isIOS) {
   speechReady = true;
 }
 
-/* 원어민 발음 재생 — 사전 API mp3 우선, 실패 시 TTS 폴백 */
 function speak(t) {
-  var word = t.trim().toLowerCase();
-  // 1) 사전 API에서 원어민 mp3 가져오기 시도
-  var xhr = new XMLHttpRequest();
-  xhr.open('GET', 'https://api.dictionaryapi.dev/api/v2/entries/en/' + encodeURIComponent(word), true);
-  xhr.timeout = 3000;
-  xhr.onload = function() {
-    if (xhr.status === 200) {
-      try {
-        var data = JSON.parse(xhr.responseText);
-        var audioUrl = '';
-        // phonetics에서 mp3 URL 찾기
-        if (data[0] && data[0].phonetics) {
-          for (var i = 0; i < data[0].phonetics.length; i++) {
-            if (data[0].phonetics[i].audio && data[0].phonetics[i].audio.length > 5) {
-              audioUrl = data[0].phonetics[i].audio;
-              break;
-            }
-          }
-        }
-        if (audioUrl) {
-          // https 보장
-          if (audioUrl.indexOf('//') === 0) audioUrl = 'https:' + audioUrl;
-          var audio = new Audio(audioUrl);
-          audio.play().catch(function() { speakTTS(t); });
-          return;
-        }
-      } catch(e) {}
-    }
-    // mp3 못 찾으면 TTS 폴백
-    speakTTS(t);
-  };
-  xhr.onerror = function() { speakTTS(t); };
-  xhr.ontimeout = function() { speakTTS(t); };
-  xhr.send();
-}
-
-function speakTTS(t) {
-  if (typeof speechSynthesis === 'undefined') return;
   speechSynthesis.cancel();
   var u = new SpeechSynthesisUtterance(t);
   u.lang = 'en-US';
-  u.rate = 0.9;
-  u.pitch = 1.0;
+  u.rate = 0.85;
+  u.pitch = 1.1;
   speechSynthesis.speak(u);
 }
 
