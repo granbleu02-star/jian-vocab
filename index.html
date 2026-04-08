@@ -1389,15 +1389,15 @@ function switchTab(tab) {
 
   if (tab === 'test') {
     document.getElementById('testSection').classList.remove('hidden');
-    data = loadData(); populateTestFolderSelect();
+    populateTestFolderSelect();
   } else if (tab === 'flash') {
     document.getElementById('flashSection').classList.remove('hidden');
-    data = loadData(); populateFlashFolderChips();
+    populateFlashFolderChips();
     document.getElementById('flashSettings').classList.remove('hidden');
     document.getElementById('flashCardArea').classList.add('hidden');
   } else {
     document.getElementById('manageSection').classList.remove('hidden');
-    data = loadData(); renderManage();
+    renderManage();
   }
   document.querySelector('.main-area').scrollTop = 0;
 }
