@@ -783,6 +783,8 @@ var DEFAULT_WORDS = [
 ];
 var DEFAULT_DATA = {folders:[{name:'기본 단어',words:DEFAULT_WORDS}]};
 
+var EMPTY_DATA = {folders:[{name:'단어장',words:[]}]};
+
 function loadData() {
   try {
     var s = localStorage.getItem(STORAGE_KEY);
@@ -793,8 +795,8 @@ function loadData() {
       saveData(d); return d;
     }
   } catch(e) {}
-  saveData(DEFAULT_DATA);
-  return JSON.parse(JSON.stringify(DEFAULT_DATA));
+  // 새 기기: 빈 상태로 시작 (Firebase에서 데이터 받아옴)
+  return JSON.parse(JSON.stringify(EMPTY_DATA));
 }
 function saveData(d) { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(d)); } catch(e) {} }
 
@@ -1499,12 +1501,21 @@ function countTotalWords(d) {
   return total;
 }
 
+function isDefaultOrEmpty(d) {
+  var total = countTotalWords(d);
+  if (total === 0) return true;
+  // 기본 단어(29개)만 있는 경우도 업로드 안 함
+  if (d.folders && d.folders.length === 1 && d.folders[0].words && d.folders[0].words.length === 29) {
+    if (d.folders[0].words[0] && d.folders[0].words[0].word === 'apple') return true;
+  }
+  return false;
+}
+
 function uploadToFirebase() {
   if (!syncEnabled || !fbRef) return;
   try {
     var d = loadData();
-    // 빈 데이터는 업로드하지 않음 (기존 데이터 보호)
-    if (countTotalWords(d) === 0) return;
+    if (isDefaultOrEmpty(d)) return;
     isRemoteUpdate = true;
     d._lastUpdated = Date.now();
     fbRef.set(d);
@@ -1525,7 +1536,7 @@ var _origSaveData = saveData;
 saveData = function(d) {
   d._lastUpdated = Date.now();
   _origSaveData(d);
-  if (syncEnabled && fbRef && countTotalWords(d) > 0) {
+  if (syncEnabled && fbRef && !isDefaultOrEmpty(d)) {
     try {
       isRemoteUpdate = true;
       fbRef.set(d);
