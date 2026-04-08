@@ -750,53 +750,13 @@ function startVoice() {
    데이터 (Safari 호환 - var, no optional chaining)
    ============================================================ */
 var STORAGE_KEY = 'jian_vocab_v2';
-var DEFAULT_WORDS = [
-  {word:"apple",definition:"A round fruit with red or green skin"},
-  {word:"happy",definition:"Feeling pleased and satisfied"},
-  {word:"run",definition:"To move quickly using your legs"},
-  {word:"book",definition:"A set of printed pages that you read"},
-  {word:"water",definition:"A clear liquid that you drink"},
-  {word:"friend",definition:"A person you like and enjoy spending time with"},
-  {word:"school",definition:"A place where children go to learn"},
-  {word:"big",definition:"Large in size"},
-  {word:"eat",definition:"To put food in your mouth and swallow it"},
-  {word:"sun",definition:"The bright star in the sky during the day"},
-  {word:"dog",definition:"A common pet animal that barks"},
-  {word:"cat",definition:"A small pet animal that says meow"},
-  {word:"tree",definition:"A tall plant with a trunk and branches"},
-  {word:"sleep",definition:"To rest with your eyes closed at night"},
-  {word:"smile",definition:"To make a happy expression with your mouth"},
-  {word:"rain",definition:"Water falling from clouds in the sky"},
-  {word:"house",definition:"A building where people live"},
-  {word:"sing",definition:"To make music with your voice"},
-  {word:"flower",definition:"The colorful part of a plant that blooms"},
-  {word:"jump",definition:"To push yourself up into the air using your legs"},
-  {word:"star",definition:"A small bright light you see in the night sky"},
-  {word:"bird",definition:"An animal with wings and feathers that can fly"},
-  {word:"cold",definition:"Having a low temperature, not warm"},
-  {word:"family",definition:"A group of people related to each other like parents and children"},
-  {word:"milk",definition:"A white drink that comes from cows"},
-  {word:"fish",definition:"An animal that lives in water and has fins"},
-  {word:"small",definition:"Little in size, not big"},
-  {word:"play",definition:"To do something fun, like games or sports"},
-  {word:"light",definition:"Something that lets you see in the dark"}
-];
-var DEFAULT_DATA = {folders:[{name:'기본 단어',words:DEFAULT_WORDS}]};
-
-var EMPTY_DATA = {folders:[{name:'단어장',words:[]}]};
 
 function loadData() {
   try {
     var s = localStorage.getItem(STORAGE_KEY);
     if (s) return JSON.parse(s);
-    var old = localStorage.getItem('jian_vocab_words');
-    if (old) {
-      var d = {folders:[{name:'기본 단어',words:JSON.parse(old)}]};
-      saveData(d); return d;
-    }
   } catch(e) {}
-  // 새 기기: 빈 상태로 시작 (Firebase에서 데이터 받아옴)
-  return JSON.parse(JSON.stringify(EMPTY_DATA));
+  return {folders:[]};
 }
 function saveData(d) { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(d)); } catch(e) {} }
 
