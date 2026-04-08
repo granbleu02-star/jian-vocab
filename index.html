@@ -1243,15 +1243,17 @@ function restoreData(input) {
       var msg = '백업 파일에서 ' + importWords + '개 단어를 복원할까요?';
       if (localWords > 0) msg += '\n\n현재 ' + localWords + '개 단어가 백업 데이터로 교체됩니다.';
       if (!confirm(msg)) return;
+      // saveData 오버라이드를 우회하여 직접 저장 (800ms 타이머 충돌 방지)
       isRemoteUpdate = true;
       imported._lastUpdated = Date.now();
-      saveData(imported);
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(imported)); } catch(e) {}
+      if (fbRef) { try { fbRef.set(imported); } catch(e) {} }
       data = imported;
       activeFolderIdx = 0;
       renderManage();
       populateTestFolderSelect();
       alert('복원 완료! (' + importWords + '개 단어)');
-      setTimeout(function() { isRemoteUpdate = false; }, 3000);
+      setTimeout(function() { isRemoteUpdate = false; }, 5000);
     } catch(err) {
       alert('파일을 읽을 수 없습니다: ' + err.message);
     }
