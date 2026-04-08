@@ -1243,7 +1243,13 @@ function restoreData(input) {
       var msg = '백업 파일에서 ' + importWords + '개 단어를 복원할까요?';
       if (localWords > 0) msg += '\n\n현재 ' + localWords + '개 단어가 백업 데이터로 교체됩니다.';
       if (!confirm(msg)) return;
+      // 타임스탬프를 현재로 강제 갱신하여 Firebase보다 최신으로 만듦
+      imported._lastUpdated = Date.now();
+      isRemoteUpdate = true;
       saveData(imported);
+      // Firebase에도 강제 업로드
+      if (fbRef) { try { fbRef.set(imported); } catch(e) {} }
+      setTimeout(function() { isRemoteUpdate = false; }, 2000);
       data = imported;
       activeFolderIdx = 0;
       renderManage();
