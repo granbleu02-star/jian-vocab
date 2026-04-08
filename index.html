@@ -9,14 +9,8 @@
 <meta name="mobile-web-app-capable" content="yes">
 <title>지안이의 영어단어 테스트</title>
 <!-- Firebase SDK (compat for Safari/var support) -->
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 <style>
 /* 동기화 상태 표시 */
-.sync-badge{position:fixed;top:8px;right:8px;z-index:100;padding:4px 10px;border-radius:12px;font-size:0.72rem;font-weight:600;color:white;display:none;}
-.sync-badge.online{display:block;background:#27ae60;}
-.sync-badge.offline{display:block;background:#e74c3c;}
-.sync-badge.syncing{display:block;background:#f7971e;}
 /* 폴더 체크박스 */
 /* 플래시카드 */
 .flash-card-area{display:-webkit-flex;display:flex;-webkit-flex-direction:column;flex-direction:column;-webkit-align-items:center;align-items:center;gap:16px;padding:10px 0;}
@@ -370,7 +364,6 @@ h1{color:white;font-size:1.6rem;margin:10px 0 8px;text-shadow:2px 2px 4px rgba(0
 <body>
 
 <!-- 동기화 상태 배지 -->
-<div class="sync-badge" id="syncBadge"></div>
 
 <!-- 왼쪽 히어로 패널 -->
 <div class="hero-panel" id="heroPanel">
@@ -1245,11 +1238,11 @@ function restoreData(input) {
       if (!confirm(msg)) return;
       // 타임스탬프를 현재로 강제 갱신하여 Firebase보다 최신으로 만듦
       imported._lastUpdated = Date.now();
-      isRemoteUpdate = true;
+
       saveData(imported);
       // Firebase에도 강제 업로드
-      if (fbRef) { try { fbRef.set(imported); } catch(e) {} }
-      setTimeout(function() { isRemoteUpdate = false; }, 2000);
+
+
       data = imported;
       activeFolderIdx = 0;
       renderManage();
@@ -1407,89 +1400,6 @@ function esc(s) {
   d.textContent = s;
   return d.innerHTML;
 }
-
-/* ============================================================
-   Firebase 클라우드 동기화
-   ============================================================ */
-var firebaseConfig = {
-  apiKey: "AIzaSyBX2UzsQPtb9sRaZZU0JT3YW29xjLGUnfc",
-  authDomain: "jian-vocab.firebaseapp.com",
-  databaseURL: "https://jian-vocab-default-rtdb.firebaseio.com",
-  projectId: "jian-vocab",
-  storageBucket: "jian-vocab.firebasestorage.app",
-  messagingSenderId: "1029358706273",
-  appId: "1:1029358706273:web:be2ceea929516b98af9420"
-};
-
-var fbApp = null, fbDb = null, fbRef = null;
-var syncEnabled = false;
-var isRemoteUpdate = false; // 원격 업데이트 중복 방지
-
-function initFirebase() {
-  try {
-    if (typeof firebase === 'undefined') { showSyncBadge('offline', '오프라인'); return; }
-    fbApp = firebase.initializeApp(firebaseConfig);
-    fbDb = firebase.database();
-    fbRef = fbDb.ref('vocab');
-    syncEnabled = true;
-
-    // 연결 상태 감지
-    fbDb.ref('.info/connected').on('value', function(snap) {
-      if (snap.val() === true) {
-        showSyncBadge('online', '동기화됨');
-      } else {
-        showSyncBadge('offline', '오프라인');
-      }
-    });
-
-    // 실시간 리스너 - 다른 기기에서 변경 시 자동 반영
-    fbRef.on('value', function(snap) {
-      if (isRemoteUpdate) return; // 자기 자신이 쓴 변경은 무시
-      var remoteData = snap.val();
-      var localData = loadData();
-      var remoteWords = remoteData ? countTotalWords(remoteData) : 0;
-      var localWords = countTotalWords(localData);
-
-      if (!remoteData || remoteWords === 0) {
-        // Firebase가 비었고 로컬에 데이터 있으면 업로드
-        if (localWords > 0) uploadToFirebase();
-        return;
-      }
-
-      var remoteTime = remoteData._lastUpdated || 0;
-      var localTime = localData._lastUpdated || 0;
-
-      // 원격이 더 최신이고, 원격에 실제 데이터가 있을 때만 반영
-      if (remoteTime > localTime && remoteWords > 0) {
-        // 원격 데이터가 로컬보다 단어가 훨씬 적으면(50% 미만) 경고
-        if (localWords > 5 && remoteWords < localWords * 0.5) {
-          // 위험한 덮어쓰기 방지 — 더 많은 데이터 유지
-          return;
-        }
-        if (remoteData.folders && remoteData.folders.length > 0) {
-          try { localStorage.setItem(STORAGE_KEY, JSON.stringify(remoteData)); } catch(e) {}
-          data = remoteData;
-          if (!document.getElementById('manageSection').classList.contains('hidden')) {
-            renderManage();
-          }
-          populateTestFolderSelect();
-          showSyncBadge('online', '동기화 완료!');
-          setTimeout(function() { showSyncBadge('online', '동기화됨'); }, 2000);
-        }
-      } else if (localTime > remoteTime && localWords > 0) {
-        // 로컬이 더 최신이면 업로드
-        uploadToFirebase();
-      }
-    });
-
-    // 초기: 로컬에 데이터 있으면 업로드
-    if (countTotalWords(loadData()) > 0) uploadToFirebase();
-    showSyncBadge('online', '동기화됨');
-  } catch(e) {
-    showSyncBadge('offline', '오프라인');
-  }
-}
-
 function countTotalWords(d) {
   var total = 0;
   if (d && d.folders) {
@@ -1500,58 +1410,8 @@ function countTotalWords(d) {
   return total;
 }
 
-function uploadToFirebase() {
-  if (!syncEnabled || !fbRef) return;
-  try {
-    var d = loadData();
-    // 빈 데이터는 업로드하지 않음 (기존 데이터 보호)
-    if (countTotalWords(d) === 0) return;
-    isRemoteUpdate = true;
-    d._lastUpdated = Date.now();
-    fbRef.set(d);
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(d)); } catch(e) {}
-    setTimeout(function() { isRemoteUpdate = false; }, 500);
-  } catch(e) {}
-}
-
-function showSyncBadge(cls, text) {
-  var badge = document.getElementById('syncBadge');
-  if (!badge) return;
-  badge.className = 'sync-badge ' + cls;
-  badge.textContent = text;
-}
-
-// saveData를 오버라이드하여 Firebase에도 저장
-var _origSaveData = saveData;
-saveData = function(d) {
-  d._lastUpdated = Date.now();
-  _origSaveData(d);
-  if (syncEnabled && fbRef && countTotalWords(d) > 0) {
-    try {
-      isRemoteUpdate = true;
-      fbRef.set(d);
-      showSyncBadge('syncing', '저장 중...');
-      setTimeout(function() {
-        isRemoteUpdate = false;
-        showSyncBadge('online', '동기화됨');
-      }, 800);
-    } catch(e) {}
-  }
-};
-
-/* 초기화 */
+/* 초기화 — Firebase 자동 동기화 없음, 백업/복원만 사용 */
 initHeroNav();
 populateTestFolderSelect();
-
-// Firebase 초기화 (SDK 로드 후)
-if (typeof firebase !== 'undefined') {
-  initFirebase();
-} else {
-  // SDK 로드 대기
-  window.addEventListener('load', function() {
-    setTimeout(initFirebase, 500);
-  });
-}
-</script>
 </body>
 </html>
