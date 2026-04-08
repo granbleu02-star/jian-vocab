@@ -645,31 +645,38 @@ if (isIOS) {
   speechReady = true;
 }
 
-// 영어 음성 목록 미리 로드 (남녀 랜덤용)
-var _engVoices = [];
-function loadEngVoices() {
+// 영어 여자 음성 미리 로드
+var _engVoice = null;
+function findEngVoice() {
   var voices = speechSynthesis.getVoices();
   if (!voices || voices.length === 0) return;
-  _engVoices = [];
+  var female = ['Samantha','Karen','Victoria','Allison','Ava','Susan','Moira','Fiona',
+    'Tessa','Serena','Zira','Microsoft Zira','Google US English Female',
+    'Google UK English Female','Shelley','Veena','Kate'];
+  for (var f = 0; f < female.length; f++) {
+    for (var v = 0; v < voices.length; v++) {
+      if (voices[v].lang.indexOf('en') === 0 && voices[v].name.indexOf(female[f]) >= 0) {
+        _engVoice = voices[v]; return;
+      }
+    }
+  }
   for (var i = 0; i < voices.length; i++) {
-    if (voices[i].lang.indexOf('en') === 0) _engVoices.push(voices[i]);
+    if (voices[i].lang.indexOf('en') === 0) { _engVoice = voices[i]; return; }
   }
 }
-loadEngVoices();
+findEngVoice();
 if (typeof speechSynthesis !== 'undefined' && speechSynthesis.onvoiceschanged !== undefined) {
-  speechSynthesis.onvoiceschanged = loadEngVoices;
+  speechSynthesis.onvoiceschanged = findEngVoice;
 }
 
 function speak(t) {
   speechSynthesis.cancel();
-  if (_engVoices.length === 0) loadEngVoices();
+  if (!_engVoice) findEngVoice();
   var u = new SpeechSynthesisUtterance(t);
   u.lang = 'en-US';
   u.rate = 0.85;
   u.pitch = 1.1;
-  if (_engVoices.length > 0) {
-    u.voice = _engVoices[Math.floor(Math.random() * _engVoices.length)];
-  }
+  if (_engVoice) u.voice = _engVoice;
   speechSynthesis.speak(u);
 }
 
