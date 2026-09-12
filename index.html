@@ -7,8 +7,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="지안이 영단어">
 <meta name="mobile-web-app-capable" content="yes">
-<title>지안이의 영어단어 · 집중 암기</title>
-<meta name="description" content="반복 오답을 기억하고, 짧게 떠올리고, 날짜를 띄워 복습하는 지안이의 영어단어 학습">
+<title>지안이의 영어단어 · 듣고 쓰기</title>
+<meta name="description" content="뜻풀이를 듣고 영어 철자를 쓰는 지안이의 학원 단어 연습. 오답 교정과 듣기 모의시험을 함께 해요.">
 <!-- Firebase SDK (compat for Safari/var support) -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
@@ -386,6 +386,9 @@ h1{color:white;font-size:1.6rem;margin:10px 0 8px;text-shadow:2px 2px 4px rgba(0
 @media(min-width:900px){.hero-portrait{width:280px}}
 @media(max-width:768px){.hero-portrait{width:110px;border-radius:12px}.hero-info{min-width:0}.hero-quote{overflow-wrap:break-word}.hero-nav{gap:14px;padding:8px 6px}}
 
+.academy .academy-scope{display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:10px;margin-top:24px}.academy select{max-width:100%;width:100%;min-width:0}.academy-launchers{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px 0}.academy-launch{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:12px;border:1px solid #dcd4f1;border-radius:16px;padding:20px 16px;background:#f3efff;color:#493789;cursor:pointer;min-height:170px;line-height:1.5}.academy-launch strong{font-size:1.08rem}.academy-launch span:last-child{font-size:.83rem;color:#605774}.academy-number{font-size:.8rem;font-weight:800;opacity:.75;letter-spacing:.1em}.academy-launch-warm{background:#fff3e8;border-color:#f0d6bf;color:#9b491c}.academy-launch-dark{background:#544493;border-color:#544493;color:white}.academy-launch-dark span:last-child{color:#e8e2ff}.academy-launch:disabled{opacity:.48;cursor:not-allowed}.academy-callout{padding:18px;background:#f3f1fb;border:1px solid #ddd6ee;border-radius:12px;margin:18px 0}.academy-choice{display:flex;flex-wrap:wrap;gap:18px;margin:18px 0}.academy input[type=radio],.academy input[type=checkbox]{accent-color:#6953b4;width:18px;height:18px;vertical-align:middle;margin-right:6px}.academy-settings{margin-top:18px;padding-top:14px;border-top:1px solid #e1dfeb}.academy-settings summary{cursor:pointer;font-weight:650;min-height:34px;line-height:1.6}.academy-setting-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px;padding:12px 0}.academy-setting-grid label{display:flex;flex-direction:column;gap:6px;font-size:.9rem}.academy-toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.academy-toolbar>div{margin-right:auto}.academy-toolbar .btn{padding:9px 12px;font-size:.875rem}#academyProgress{width:100%;height:7px;margin:18px 0;accent-color:#7962c3}.academy-listening{padding:22px 18px;text-align:center;border:1px solid #d9d1eb;background:#f7f4ff;border-radius:18px}.academy-ear{font-size:2.2rem;color:#745cac}.academy-definition{font-size:1.35rem;line-height:1.65;margin:20px 0 5px;color:#26324a;white-space:pre-line;overflow-wrap:anywhere}.academy-answer-label{display:block;font-weight:700;margin:20px 0 8px}#academyAnswer{width:100%;border:2px solid #cec7e1;border-radius:12px;padding:15px 18px;font-size:1.55rem;color:#2c2547;min-width:0}#academyAnswer:focus{outline:3px solid #e3d8ff;outline-offset:2px;border-color:#7357ae}.academy-feedback{margin-top:20px;border:1px solid #e8c8ad;background:#fff7ee;border-radius:14px;padding:19px}.academy-feedback.correct{border-color:#bbdfcc;background:#eff9f2}.academy-spelling-line{margin:8px 0;overflow-wrap:anywhere}.academy-spelling-line strong{display:block;font-size:1.6rem;letter-spacing:.04em;color:#30273e}.academy-spelling-line small{font-size:.83rem;color:#69586a}.academy-spelling-line del{background:#ffded9;color:#9c2525;text-decoration-thickness:2px}.academy-spelling-line mark{background:#ffdf9e;color:#6c4000;border-radius:3px;padding:0 1px}.academy-result-row{padding:16px 0;border-bottom:1px solid #e3dfeb;display:grid;grid-template-columns:26px 1fr;gap:8px}.academy-result-row strong{font-size:1.2rem;overflow-wrap:anywhere}.academy-result-row p{margin:4px 0;font-size:.9rem;overflow-wrap:anywhere}.academy-result-tag{font-size:.8rem;padding:4px 7px;border-radius:6px;display:inline-block;background:#ecf6ee;color:#2a6a3e}.academy-result-tag.wrong{background:#ffede2;color:#9b401c}.academy-environment{padding:10px 12px;margin-bottom:18px;background:#fff1bd;color:#674b0c;border-radius:8px;font-size:.85rem}.academy-environment a{color:inherit;text-decoration:underline}.academy #academyCloudSlot .learning-cloud{margin-top:22px;padding:15px}.academy-compact-status{font-size:.87rem;color:#5f6270}.academy .support-copy:empty{display:none}.academy .smart-actions{margin-top:14px}.academy-focus .hero-panel{justify-content:flex-start;padding-top:28px}.academy-focus .hero-portrait{box-shadow:none}.academy-focus .hero-nav{pointer-events:none;opacity:.5}.academy-focus .hero-quote{opacity:.65}.academy-focus .hero-panel *{animation:none!important;transition:none!important}.tabs .tab-btn[data-tab=test],.tabs .tab-btn[data-tab=flash]{display:none}
+@media(max-width:768px){.academy .academy-scope{grid-template-columns:95px 1fr}.academy-launchers{grid-template-columns:1fr;gap:10px}.academy-launch{display:grid;grid-template-columns:32px 1fr;min-height:auto;padding:16px;gap:3px 10px}.academy-launch .academy-number{grid-row:1/3;align-self:center}.academy-launch strong{font-size:1.05rem}.academy-launch span:last-child{grid-column:2}.academy-setting-grid{grid-template-columns:1fr}.academy-definition{font-size:1.18rem}.academy-listening{padding:16px 12px}.academy-focus .hero-panel{padding:10px 12px;align-items:center}.academy-focus .hero-portrait{width:58px;border-radius:8px}.academy-focus .hero-quote,.academy-focus .hero-nav{display:none}.academy-focus .hero-name{font-size:1rem}.academy .smart-actions .btn{flex:auto;min-height:43px}#academyAnswer{font-size:1.3rem}.academy-toolbar .btn{padding:8px 10px}}
+
 </style>
 </head>
 <body>
@@ -429,8 +432,53 @@ h1{color:white;font-size:1.6rem;margin:10px 0 8px;text-shadow:2px 2px 4px rgba(0
     <button class="tab-btn" data-tab="manage" onclick="switchTab('manage')">단어 관리</button>
   </div>
 
+<section class="card smart academy hidden" id="academyHome" aria-label="학원 단어 학습 홈">
+  <div id="academyEnvironment" class="academy-environment hidden"></div>
+  <div class="smart-heading"><div><span class="eyebrow">지안이의 학원 단어 연습</span><h2>뜻을 듣고, 정확하게 써요.</h2></div><span class="version-tag">UPGRADE 11</span></div>
+  <p class="support-copy">학원 단어장의 뜻풀이를 듣고 영어 스펠링을 써요.</p>
+  <div class="academy-scope"><label for="academyFolder">시험 범위</label><select id="academyFolder"></select><label for="academyCount">연습 단어 수</label><select id="academyCount"><option value="5">5개</option><option value="10" selected>10개</option><option value="20">20개</option><option value="0">전체</option></select></div>
+  <p id="academyStats" class="support-copy"></p>
+  <div class="academy-launchers">
+    <button class="academy-launch" id="academyPractice"><span class="academy-number">01</span><strong>오늘 단어 외우기</strong><span>뜻풀이 듣기 → 쓰기 → 바로 확인</span></button>
+    <button class="academy-launch academy-launch-warm" id="academyWeak"><span class="academy-number">02</span><strong>틀린 단어만 연습</strong><span>철자 확인 → 가리고 다시 쓰기</span></button>
+    <button class="academy-launch academy-launch-dark" id="academyExam"><span class="academy-number">03</span><strong>학원처럼 시험 보기</strong><span>소리만 듣고 풀기 → 마지막에 채점</span></button>
+  </div>
+  <div id="academyContinueBox" class="academy-callout hidden"><p>이 기기에 하던 연습이 남아 있어요.</p><button class="btn btn-primary" id="academyContinue">하던 학습 이어하기</button><button class="btn btn-light" id="academyDiscard">새로 시작하기</button></div>
+  <div id="academyExamSetup" class="academy-callout hidden"><h3>학원처럼 시험 보기</h3><p id="academyExamScope" class="support-copy"></p><div class="academy-choice"><label><input type="radio" name="academyExamMode" value="exam" checked> 화면에 입력 · 자동 채점</label><label><input type="radio" name="academyExamMode" value="paper"> 종이에 쓰기 · 직접 채점</label></div><p class="support-copy">시험 중에는 뜻풀이와 정답을 화면에 보여주지 않아요. 소리가 잘 들리는지 먼저 확인해요.</p><button class="btn btn-light" id="academySoundCheck">소리 확인</button><button class="btn btn-primary" id="academyExamStart">시험 시작</button><p id="academySoundStatus" class="support-copy" role="status"></p></div>
+  <details class="academy-settings"><summary>소리와 연습 설정</summary><div class="academy-setting-grid">
+    <label>연습 중 뜻풀이 표시<select id="academyDisplay"><option value="text">듣고 화면에서도 보기</option><option value="audio">소리로만 듣기</option></select></label>
+    <label>뜻풀이 언어<select id="academyLanguage"><option value="auto">자동 · 등록된 뜻풀이 기준</option><option value="en-US">영어</option><option value="ko-KR">한국어</option></select></label>
+    <label>읽는 속도<select id="academyRate"><option value="0.7">천천히</option><option value="0.85" selected>조금 천천히</option><option value="1">보통</option></select></label>
+    <label>불러주는 횟수<select id="academyRepeats"><option value="1">1번</option><option value="2" selected>2번</option></select></label>
+    <label>시험에서 답을 쓸 시간<select id="academySeconds"><option value="0">직접 다음 누르기</option><option value="10">10초</option><option value="15">15초</option><option value="20">20초</option><option value="30">30초</option></select></label>
+  </div><p class="support-copy">시험 시간은 뜻풀이를 모두 읽은 뒤 시작해요. 연습에는 시간 제한이 없어요. 기기에서 제공하는 음성으로 등록된 뜻풀이를 읽습니다.</p><button class="btn btn-light" id="academyPreviewVoice">소리 미리 듣기</button><p id="academyPreviewStatus" class="support-copy" role="status"></p></details>
+  <p id="academyNotice" class="support-copy" role="status"></p>
+  <div id="academyEmpty" class="smart-empty hidden"><p>시험 범위에 단어가 없어요. 단어장에 영어 단어와 선생님이 사용하는 뜻풀이를 등록해요.</p><button class="btn btn-primary" id="academyManage">단어장 열기</button><button class="btn btn-light hidden" id="academyDemo">검증용 예시 단어 넣기</button></div>
+  <details class="academy-settings"><summary>복습할 단어 확인</summary><div id="academyWeakList"></div></details>
+  <div id="academyCloudSlot"></div>
+  <details class="academy-settings"><summary>다른 연습 방법</summary><div class="smart-actions"><button class="btn btn-light" id="academyLegacyTest">화면 보고 테스트</button><button class="btn btn-light" id="academyLegacyFlash">플래시카드</button><button class="btn btn-light" id="academyLegacySmart">3분 집중 암기</button></div></details>
+</section>
+<section class="card smart academy hidden" id="academySession" aria-label="뜻풀이 듣고 쓰기">
+  <div class="academy-toolbar"><div><span class="eyebrow" id="academyModeLabel"></span><h2 id="academyQuestionNumber" tabindex="-1"></h2></div><button class="btn btn-light" id="academyPause">잠깐 쉬기</button><button class="btn btn-light" id="academyHomeButton">홈으로</button></div>
+  <progress id="academyProgress" max="10" value="0" aria-label="단어 학습 진행"></progress>
+  <div id="academyActive">
+    <div class="academy-listening"><span class="academy-ear" aria-hidden="true">♪</span><p id="academyListenInstruction">뜻풀이를 듣고 영어 단어를 써요.</p><button class="btn btn-primary" id="academyListen">뜻풀이 다시 듣기</button><p id="academySpeechStatus" class="support-copy" role="status"></p><p id="academyDefinition" class="academy-definition hidden"></p><button class="btn btn-light hidden" id="academyShowDefinition">뜻풀이 글로 보기</button></div>
+    <p id="academyCountdown" class="support-copy" role="status" aria-live="off"></p>
+    <form id="academyAnswerForm"><label class="academy-answer-label" for="academyAnswer">영어 스펠링</label><input id="academyAnswer" type="text" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="100" placeholder="영어 단어를 써주세요" aria-describedby="academyInputNotice"><p id="academyInputNotice" class="support-copy" role="status"></p><div class="smart-actions"><button type="submit" class="btn btn-primary" id="academySubmit">정답 확인</button><button type="button" class="btn btn-light" id="academySkip">모르겠어요</button><button type="button" class="btn btn-light" id="academyHint">첫 글자 힌트</button></div><p id="academyHintText" class="support-copy"></p></form>
+    <div id="academyPaperControls" class="smart-empty hidden"><p>공책에 문제 번호와 영어 단어를 써주세요.</p><button class="btn btn-primary" id="academyPaperNext">썼어요 · 다음</button></div>
+    <div id="academyFeedback" class="academy-feedback hidden" role="status"><h3 id="academyFeedbackTitle"></h3><div id="academySpellingDiff"></div><p id="academyFeedbackNote" class="support-copy"></p><div class="smart-actions"><button class="btn btn-primary hidden" id="academyRewrite">정답 가리고 다시 쓰기</button><button class="btn btn-primary hidden" id="academyNext">다음 단어</button><button class="btn btn-light hidden" id="academyCorrectionSkip">다른 단어 뒤에 연습</button></div></div>
+  </div>
+  <div id="academyWait" class="smart-empty hidden"><h3>잠깐 뒤에 다시 떠올려요.</h3><p id="academyWaitText"></p></div>
+  <div id="academyPaused" class="smart-empty hidden"><h3>잠깐 쉬어가요.</h3><p>계속하면 뜻풀이를 다시 읽어요. 시험의 답 쓸 시간도 처음부터 시작해요.</p><button class="btn btn-primary" id="academyResume">계속하기</button></div>
+</section>
+<section class="card smart academy hidden" id="academyResult" aria-label="학습 결과">
+  <span class="eyebrow" id="academyResultMode"></span><h2 id="academyResultTitle"></h2><p id="academyResultSummary" class="support-copy"></p><div id="academyResultList"></div>
+  <div id="academyPaperMark" class="academy-callout hidden"><p>위 정답표와 공책을 비교해 틀린 번호에 체크하세요. 체크하지 않은 번호는 정답으로 저장합니다.</p><label><input type="checkbox" id="academyPaperReviewed"> 모든 답안을 확인했어요.</label><p class="support-copy">직접 채점한 결과로 저장해요. 자동 채점으로 확인한 철자 숙달과는 구분합니다.</p><button class="btn btn-primary" id="academySavePaper" disabled>직접 채점 결과 저장</button></div>
+  <div class="smart-actions"><button class="btn btn-primary hidden" id="academyRetryWrong">틀린 단어 다시 연습</button><button class="btn btn-light" id="academyResultHome">학습 홈으로</button></div><p id="academyResultNotice" class="support-copy" role="status"></p>
+</section>
+
 <section class="card hidden smart" id="smartSection" aria-label="오늘의 집중 학습">
-  <div class="smart-heading"><div><span class="eyebrow">지안이의 기억 훈련</span><h2>조금씩, 확실하게 기억해요.</h2></div><span class="version-tag">UPGRADE 10</span></div>
+  <div class="smart-heading"><div><span class="eyebrow">지안이의 기억 훈련</span><h2>조금씩, 확실하게 기억해요.</h2></div><span class="version-tag">UPGRADE 11</span></div>
   <div class="learning-stats" id="learningStats"></div>
   <div class="mission"><div><h3>오늘의 3분 집중 암기</h3><p>뜻을 보고 떠올린 뒤 정답을 확인해요.<br>헷갈린 단어는 조금 뒤에 다시 만나요.</p></div><button class="btn btn-primary" id="startSmart">3분 암기 시작</button></div>
   <div class="smart-options"><label>학습 범위 <select id="smartFolder"><option value="all">전체 폴더</option></select></label><label>한 번에 <select id="smartCount"><option value="5">5단어</option><option value="10" selected>10단어</option><option value="20">20단어</option></select></label><label>떠올릴 시간 <select id="recallSeconds"><option value="5">5초</option><option value="8" selected>8초</option><option value="12">12초</option><option value="0">시간 제한 없이</option></select></label></div>
@@ -653,6 +701,7 @@ var speechReady = false;
 var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
 function initSpeechIOS() {
+  if (typeof speechSynthesis === 'undefined' || typeof SpeechSynthesisUtterance === 'undefined') return;
   var u = new SpeechSynthesisUtterance('');
   u.volume = 0;
   speechSynthesis.speak(u);
@@ -673,6 +722,7 @@ if (isIOS) {
 // 영어 여자 음성 미리 로드
 var _engVoice = null;
 function findEngVoice() {
+  if (typeof speechSynthesis === 'undefined') return;
   var voices = speechSynthesis.getVoices();
   if (!voices || voices.length === 0) return;
   var female = ['Samantha','Karen','Victoria','Allison','Ava','Susan','Moira','Fiona',
@@ -695,6 +745,7 @@ if (typeof speechSynthesis !== 'undefined' && speechSynthesis.onvoiceschanged !=
 }
 
 function speak(t) {
+  if (typeof speechSynthesis === 'undefined' || typeof SpeechSynthesisUtterance === 'undefined') return;
   speechSynthesis.cancel();
   if (!_engVoice) findEngVoice();
   var u = new SpeechSynthesisUtterance(t);
@@ -1609,7 +1660,7 @@ if (typeof firebase !== 'undefined') {
   function fresh() { return {attempts:0, wrong:0, assisted:0, cards:0, clean:0, stage:0, due:0, last:0, lastDay:'', recent:[], lastAnswer:''}; }
   function get(records, w) { return Object.assign(fresh(), records[key(w)] || {}); }
   function day(now) { var d = new Date(now); return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
-  function weak(s) { return s.wrong > 0 && s.clean < 2; }
+  function weak(s) { return (s.wrong > 0 || s.assisted > 0) && s.clean < 2; }
   function priority(s, now) {
     if (weak(s)) return 1000 + Math.min(s.wrong, 20)*10 + (s.due <= now ? 40 : 0);
     if (s.attempts && s.due <= now) return 700;
@@ -1938,7 +1989,7 @@ if (typeof firebase !== 'undefined') {
     if(e.code==='Space'){e.preventDefault();reveal();}else if(e.key==='1'){e.preventDefault();rate('wrong');}else if(e.key==='2'){e.preventDefault();rate('assisted');}else if(e.key==='3'){e.preventDefault();rate('card');}else if(e.key==='Enter'&&sprint.rated){e.preventDefault();nextCard();}
   });
   window.addEventListener('storage',function(e){if(e.key===RECORD_KEY){try{records=L.validateRecords(JSON.parse(e.newValue||'{}'));refresh();}catch(err){notice('다른 탭의 학습 기록을 읽지 못했어요.');}}});
-  window.jianLearningBridge={getRecords:function(){return L.validateRecords(records);},setRecords:function(incoming){records=L.validateRecords(incoming);saveRecords();if(activeTab==='smart')refresh();}};
+  window.jianLearningBridge={recordAnswer:record,getRecords:function(){return L.validateRecords(records);},setRecords:function(incoming){records=L.validateRecords(incoming);saveRecords();if(activeTab==='smart')refresh();window.dispatchEvent(new CustomEvent('jian:records-updated'));}};
   switchTab('smart');
 })();
 
@@ -2016,6 +2067,225 @@ if (typeof firebase !== 'undefined') {
   try{code=localStorage.getItem(localKey)||'';if(code){C.codeBytes(code);doc=C.validate(JSON.parse(localStorage.getItem(docKey)));apply();el('cloudCode').value=code;connected();sync();}}
   catch(err){code='';doc=null;status('클라우드 연결 정보를 읽지 못했어요. 기존 연결 코드로 다시 연결해주세요.','error');}
   connected();
+})();
+
+(function(root){
+  'use strict';
+  function normalize(value){return String(value||'').normalize('NFKC').trim().toLowerCase().replace(/\s+/g,' ');}
+  function key(w){return JSON.stringify([normalize(w.word),normalize(w.definition)]);}
+  function shuffle(words,random){var list=words.slice();random=random||Math.random;for(var i=list.length-1;i>0;i--){var j=Math.floor(random()*(i+1)),tmp=list[i];list[i]=list[j];list[j]=tmp;}return list;}
+  function create(words,mode){return {version:1,mode:mode,original:words.slice(),queue:words.map(function(w){return {word:w,round:0,readyAt:0};}),current:null,responses:[],repeats:{},phase:'ready',done:false,committed:false};}
+  function take(s,now){if(!s.queue.length){s.done=true;s.phase='done';s.current=null;return null;}if(s.queue[0].readyAt>now)return null;s.current=s.queue.shift();s.phase='answer';return s.current;}
+  function hideAnswer(s,now){if(s.mode!=='practice'||s.phase!=='feedback'||!s.current)return;var k=key(s.current.word);s.queue.forEach(function(e){if(e.readyAt&&key(e.word)===k)e.readyAt=Math.max(e.readyAt,now+10000);});s.phase='waiting';}
+  function answer(s,value,helped,now){
+    if(!s.current||s.phase!=='answer'||s.done)return null;
+    var w=s.current.word,correct=normalize(value)===normalize(w.word),grade=correct?(helped?'assisted':'correct'):'wrong';
+    var result={word:w,answer:String(value||'').slice(0,200),correct:correct,grade:grade,round:s.current.round};s.responses.push(result);s.phase='feedback';
+    if(s.mode==='practice'&&grade!=='correct'){
+      var k=key(w),count=s.repeats[k]||0;
+      if(count<2&&!s.queue.some(function(e){return key(e.word)===k;})){
+        s.repeats[k]=count+1;var gap=Math.min(2,s.queue.length);
+        s.queue.splice(gap,0,{word:w,round:count+1,readyAt:gap<2?now+10000:0});
+      }
+    }
+    return result;
+  }
+  function summary(s){
+    var first={},last={};s.responses.forEach(function(r){var k=key(r.word);if(!first[k])first[k]=r;last[k]=r;});
+    var firstRows=s.original.map(function(w){return first[key(w)];}).filter(Boolean);
+    return {firstRows:firstRows,firstCorrect:firstRows.filter(function(r){return r.grade==='correct';}).length,
+      independent:s.responses.filter(function(r){return r.grade==='correct';}).length,
+      weak:s.original.filter(function(w){return !last[key(w)]||last[key(w)].grade!=='correct';}),
+      missed:s.original.filter(function(w){return first[key(w)]&&first[key(w)].grade!=='correct';})};
+  }
+  function paperResults(s,wrongIndices){return s.original.map(function(w,i){var wrong=wrongIndices.indexOf(i)>=0;return {word:w,answer:'[종이·직접채점] '+(wrong?'오답':'정답'),grade:wrong?'wrong':'card',correct:!wrong,round:0};});}
+  function spellingDiff(expected,actual){
+    var a=Array.from(normalize(expected).slice(0,200)),b=Array.from(normalize(actual).slice(0,200)),d=Array.from({length:a.length+1},function(){return [];});
+    for(var i=0;i<=a.length;i++)d[i][0]=i;for(var j=0;j<=b.length;j++)d[0][j]=j;
+    for(i=1;i<=a.length;i++)for(j=1;j<=b.length;j++)d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));
+    var out=[];i=a.length;j=b.length;
+    while(i||j){if(i&&j&&d[i][j]===d[i-1][j-1]+(a[i-1]===b[j-1]?0:1)){out.unshift({expected:a[i-1],actual:b[j-1],same:a[i-1]===b[j-1]});i--;j--;}
+      else if(i&&d[i][j]===d[i-1][j]+1){out.unshift({expected:a[i-1],actual:'',same:false});i--;}
+      else{out.unshift({expected:'',actual:b[j-1],same:false});j--;}}
+    return out;
+  }
+  var api={normalize:normalize,key:key,shuffle:shuffle,create:create,take:take,hideAnswer:hideAnswer,answer:answer,summary:summary,paperResults:paperResults,spellingDiff:spellingDiff};
+  if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.JianAcademy=api;
+})(typeof window!=='undefined'?window:this);
+
+(function(root){
+  'use strict';
+  function language(text,setting){return setting&&setting!=='auto'?setting:/[가-힣]/.test(text)?'ko-KR':'en-US';}
+  function errorMessage(reason){
+    if(['speech-unavailable','synthesis-unavailable','synthesis-failed','language-unavailable','voice-unavailable'].includes(reason))return '이 브라우저에서 음성을 재생하지 못했어요. Chrome·Edge·Safari에서 소리를 확인해 주세요.';
+    if(reason==='not-allowed')return '재생이 허용되지 않았어요. 소리 버튼을 다시 눌러주세요.';
+    return '소리를 재생하지 못했어요. 음량과 인터넷을 확인하고 다시 듣기를 눌러주세요.';
+  }
+  function create(synth,Utterance,clock){
+    clock=clock||{setTimeout:function(fn,ms){return setTimeout(fn,ms);},clearTimeout:function(id){clearTimeout(id);}};var generation=0,delay=null,watchdog=null,current=null;
+    function stop(){generation++;clock.clearTimeout(delay);clock.clearTimeout(watchdog);current=null;if(synth)try{synth.cancel();}catch(e){}}
+    function play(text,options,handlers){
+      stop();var token=generation,remaining=Number(options.repeats)||1,lang=language(text,options.language);handlers=handlers||{};
+      if(!synth||!Utterance){if(handlers.error)handlers.error('speech-unavailable');return;}
+      function fail(reason){if(token!==generation)return;clock.clearTimeout(watchdog);clock.clearTimeout(delay);generation++;try{synth.cancel();}catch(e){}if(typeof console!=='undefined')console.warn('Definition speech:',reason);if(handlers.error)handlers.error(reason);}
+      function next(){
+        if(token!==generation)return;current=new Utterance(text);current.lang=lang;current.rate=Number(options.rate)||.85;current.pitch=1;current.volume=1;
+        var voices=synth.getVoices?synth.getVoices():[],matching=voices.filter(function(v){return v.lang.toLowerCase().startsWith(lang.slice(0,2).toLowerCase());});
+        current.voice=matching.find(function(v){return v.default;})||matching[0]||null;
+        current.onstart=function(){if(token===generation&&handlers.start)handlers.start();};
+        current.onend=function(){if(token!==generation)return;clock.clearTimeout(watchdog);remaining--;if(remaining>0)delay=clock.setTimeout(next,650);else{current=null;if(handlers.end)handlers.end();}};
+        current.onerror=function(e){fail(e.error||'speech-failed');};
+        watchdog=clock.setTimeout(function(){fail('speech-timeout');},Math.max(20000,Math.min(120000,text.length*180+10000)));
+        try{synth.speak(current);}catch(e){fail(e.message);}
+      }
+      next();
+    }
+    return {play:play,stop:stop};
+  }
+  var api={create:create,language:language,errorMessage:errorMessage};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.JianSpeaker=api;
+})(typeof window!=='undefined'?window:this);
+
+(function(){
+  'use strict';
+  var A=JianAcademy,L=JianLearning,B=window.jianLearningBridge;
+  var suffix=IS_QA?'_qa':'',SETTINGS='jian_academy_settings_v1'+suffix,DRAFT='jian_academy_draft_v1'+suffix;
+  var settings={},session=null,page='home',tick=null,paused=false,helped=false,rewrite=false,rewriteTries=0,remaining=0,timerRunning=false,lastTick=0,startedAt=0,waiting=false,activeResult=null,examWords=[];
+  var speaker=JianSpeaker.create(window.speechSynthesis,window.SpeechSynthesisUtterance);
+  function el(id){return document.getElementById(id);}
+  function visible(id,on){el(id).classList.toggle('hidden',!on);}
+  function note(text){el('academyNotice').textContent=text;}
+  function records(){return B.getRecords();}
+  function words(){var f=el('academyFolder').value;return L.unique(f==='all'?data.folders.reduce(function(a,b){return a.concat(b.words||[]);},[]):data.folders[Number(f)]?data.folders[Number(f)].words||[]:[]);}
+  function options(){return {display:el('academyDisplay').value,language:el('academyLanguage').value,rate:el('academyRate').value,repeats:el('academyRepeats').value,seconds:el('academySeconds').value,folder:el('academyFolder').value,count:el('academyCount').value};}
+  try{settings=JSON.parse(localStorage.getItem(SETTINGS)||'{}')||{};}catch(e){}
+  var optionFields={display:'academyDisplay',language:'academyLanguage',rate:'academyRate',repeats:'academyRepeats',seconds:'academySeconds',count:'academyCount'};
+  Object.keys(optionFields).forEach(function(k){var control=el(optionFields[k]);if(Array.from(control.options).some(function(o){return o.value===String(settings[k]);}))control.value=String(settings[k]);});
+  function saveSettings(){settings=options();try{localStorage.setItem(SETTINGS,JSON.stringify(settings));}catch(e){note('이 기기에 설정을 저장하지 못했어요.');}}
+  function saveDraft(){if(!session)return;if(session.done&&session.committed){clearDraft();return;}session.draftAnswer=el('academyAnswer').value;session.helped=helped;session.rewrite=rewrite;session.rewriteTries=rewriteTries;session.waiting=waiting;try{localStorage.setItem(DRAFT,JSON.stringify(session));}catch(e){el('academyInputNotice').textContent='하던 학습을 보관하지 못했어요. 이 화면을 닫기 전에 마쳐주세요.';}}
+  function clearDraft(){try{localStorage.removeItem(DRAFT);}catch(e){}}
+  function loadDraft(){try{var d=JSON.parse(localStorage.getItem(DRAFT)||'null');if(!d||d.version!==1||!['practice','exam','paper'].includes(d.mode)||!Array.isArray(d.original)||d.original.length>5000||!d.original.every(function(w){return w&&typeof w.word==='string'&&typeof w.definition==='string';})||!Array.isArray(d.responses)||!Array.isArray(d.queue))return null;return d;}catch(e){return null;}}
+  function refreshHome(){
+    var selected=el('academyFolder').value||settings.folder||'all',control=el('academyFolder');control.replaceChildren();var all=document.createElement('option');all.value='all';all.textContent='전체 단어장';control.appendChild(all);
+    data.folders.forEach(function(f,i){var opt=document.createElement('option');opt.value=String(i);opt.textContent=f.name+' ('+(f.words||[]).length+'개)';control.appendChild(opt);});control.value=Array.from(control.options).some(function(o){return o.value===selected;})?selected:'all';
+    var pool=words(),r=records(),weak=pool.filter(function(w){return L.weak(L.get(r,w));}),due=pool.filter(function(w){var s=L.get(r,w);return s.attempts&&s.due<=Date.now();});
+    el('academyStats').textContent='선택한 범위 '+pool.length+'개 · 다시 연습 '+weak.length+'개 · 지금 복습 '+due.length+'개';
+    el('academyPractice').disabled=!pool.length;el('academyWeak').disabled=!weak.length;el('academyExam').disabled=!pool.length;visible('academyEmpty',!pool.length);visible('academyContinueBox',!!(session&&!session.committed)||!!loadDraft());
+    el('academyWeakList').replaceChildren();L.select(pool,r,'weak',10,Date.now()).forEach(function(w){var item=document.createElement('div'),s=L.get(r,w);item.className='weak-row'+(s.wrong>=2?' repeated':'');var label=document.createElement('div');label.innerHTML=(s.wrong>=2?'<span class="study-badge hot">반복 오답 · 먼저 연습해요</span><br>':'')+'<strong>'+esc(w.word)+'</strong><p>'+esc(w.definition)+'</p><p>누적 오답 '+s.wrong+'회'+(s.assisted?' · 힌트 사용 '+s.assisted+'회':'')+'</p>';var button=document.createElement('button');button.className='btn btn-light';button.textContent='이 단어 연습';button.setAttribute('aria-label',w.word+' 듣고 쓰기');button.onclick=function(){launch('practice',[w],'한 단어 연습');};item.append(label,button);el('academyWeakList').appendChild(item);});if(!weak.length)el('academyWeakList').textContent='아직 다시 연습할 단어가 없어요.';
+  }
+  function stopSound(){speaker.stop();timerRunning=false;}
+  function hideAcademy(){['academyHome','academySession','academyResult'].forEach(function(id){visible(id,false);});document.body.classList.remove('academy-focus');}
+  var legacySwitch=switchTab;
+  switchTab=function(tab){
+    stopSound();if(session&&!session.done){paused=true;saveDraft();}
+    hideAcademy();legacySwitch(tab==='academy-legacy'?'smart':tab);page='legacy';
+    if(tab==='smart'){visible('smartSection',false);visible('academyHome',true);page='home';refreshHome();}
+  };
+  function showPage(target){hideAcademy();['smartSection','sprintSection','testSection','flashSection','manageSection'].forEach(function(id){visible(id,false);});visible(target==='home'?'academyHome':target==='result'?'academyResult':'academySession',true);page=target;document.body.classList.toggle('academy-focus',target==='session');document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.toggle('active',b.dataset.tab==='smart');});}
+  function practice(mode,override){var selected=override||L.select(words(),records(),mode,Number(el('academyCount').value),Date.now());launch('practice',selected,mode==='weak'?'틀린 단어만 연습':'오늘 단어 외우기');}
+  function launch(mode,pool,label){
+    if(!pool.length){note('선택한 범위에 학습할 단어가 없어요.');return;}
+    if((session&&!session.done)||loadDraft()){note('하던 학습을 이어가거나, ‘새로 시작하기’를 눌러 정리한 뒤 시작해주세요.');visible('academyContinueBox',true);return;}
+    saveSettings();session=A.create(pool,mode);session.options=options();session.label=label||'학원처럼 시험 보기';session.title=el('academyFolder').selectedOptions[0].textContent;session.started=Date.now();session.paperChecks=[];paused=false;activeResult=null;visible('academyExamSetup',false);showPage('session');nextQuestionAcademy();ensureTick();
+  }
+  function ensureTick(){clearInterval(tick);lastTick=Date.now();tick=setInterval(function(){var now=Date.now(),delta=Math.min(1000,now-lastTick);lastTick=now;if(!session||page!=='session'||paused)return;
+    if(waiting){var gap=Math.ceil((session.queue[0].readyAt-now)/1000);el('academyWaitText').textContent=Math.max(0,gap)+'초 뒤, 정답 없이 한 번 더 써봐요.';if(gap<=0){waiting=false;nextQuestionAcademy();}}
+    if(timerRunning){remaining=Math.max(0,remaining-delta);el('academyCountdown').textContent='답 쓸 시간 '+Math.ceil(remaining/1000)+'초';if(remaining<=0){timerRunning=false;if(session.mode==='paper')paperNext();else submitAnswer(true);}}
+  },250);}
+  function nextQuestionAcademy(){
+    stopSound();helped=false;rewrite=false;rewriteTries=0;remaining=0;paused=false;
+    A.hideAnswer(session,Date.now());
+    if(!A.take(session,Date.now())){if(session.done){finish();return;}waiting=true;visible('academyActive',false);visible('academyPaused',false);visible('academyWait',true);el('academyWaitText').textContent='정답을 가렸어요. 잠깐 기다려요.';saveDraft();return;}
+    waiting=false;showQuestionAcademy(false);saveDraft();
+  }
+  function showQuestionAcademy(restoring){
+    var current=session.current,w=current.word,practiceMode=session.mode==='practice';showPage('session');visible('academyActive',true);visible('academyWait',false);visible('academyPaused',false);
+    el('academyModeLabel').textContent=session.label;var first=session.responses.filter(function(r){return r.round===0;}).length;
+    el('academyQuestionNumber').textContent=current.round?'틀린 단어 다시 확인':(Math.min(first+1,session.original.length))+' / '+session.original.length+'번';el('academyProgress').max=session.original.length;el('academyProgress').value=first;
+    el('academyListenInstruction').textContent=rewrite?'정답을 가렸어요. 뜻을 듣고 단어 전체를 다시 써요.':'뜻풀이를 듣고 영어 단어를 '+(session.mode==='paper'?'공책에 ':'')+'써요.';
+    el('academyDefinition').textContent=practiceMode&&session.options.display==='text'?w.definition:'';visible('academyDefinition',practiceMode&&session.options.display==='text');visible('academyShowDefinition',practiceMode&&session.options.display!=='text');
+    visible('academyAnswerForm',session.mode!=='paper');visible('academyPaperControls',session.mode==='paper');visible('academyFeedback',false);el('academySpellingDiff').replaceChildren();el('academyFeedbackTitle').textContent='';el('academyHintText').textContent='';el('academyInputNotice').textContent='';el('academyCountdown').textContent='';
+    el('academyAnswer').value=restoring?session.draftAnswer||'':'';el('academyAnswer').disabled=false;el('academySubmit').disabled=false;el('academySkip').disabled=false;el('academyListen').disabled=false;visible('academyHint',practiceMode&&!rewrite);el('academyHint').disabled=helped;
+    el('academySubmit').textContent=rewrite?'다시 쓴 철자 확인':practiceMode?'정답 확인':session.queue.length?'답 저장 · 다음':'답 저장 · 시험 마치기';el('academyPaperNext').textContent=session.queue.length?'썼어요 · 다음':'정답표 보고 채점하기';
+    el('academySkip').textContent=practiceMode?'모르겠어요':'빈칸으로 다음';
+    startedAt=Date.now();if(session.mode!=='paper')el('academyAnswer').focus({preventScroll:true});else el('academyQuestionNumber').focus({preventScroll:true});playDefinition();
+  }
+  function playDefinition(){
+    if(!session||paused||page!=='session'||waiting||!session.current)return;timerRunning=false;var current=session.current;
+    el('academySpeechStatus').textContent='뜻풀이를 읽고 있어요…';
+    speaker.play(current.word.definition,session.options,{start:function(){el('academySpeechStatus').textContent='뜻풀이를 듣고 있어요…';},end:function(){if(!session||session.current!==current||paused||page!=='session')return;el('academySpeechStatus').textContent='다 들었어요. 다시 듣기도 할 수 있어요.';
+      if(session.mode!=='practice'&&session.phase==='answer'&&Number(session.options.seconds)>0){remaining=Number(session.options.seconds)*1000;timerRunning=true;}
+    },error:function(reason){if(page!=='session')return;timerRunning=false;el('academySpeechStatus').textContent=JianSpeaker.errorMessage(reason)+(session.mode==='practice'?'':' 자동 넘김은 멈췄어요.');}});
+  }
+  function recordResult(r){B.recordAnswer(r.word,r.grade,r.answer||'(모르겠어요)',r.seconds||0);}
+  function submitAnswer(allowBlank){
+    if(!session||session.done||paused||waiting||page!=='session'||el('academyAnswer').disabled)return;
+    var value=el('academyAnswer').value.trim();if(!value&&!allowBlank){el('academyInputNotice').textContent='영어 단어를 입력하거나 ‘모르겠어요’를 눌러주세요.';el('academyAnswer').focus();return;}
+    stopSound();
+    if(rewrite){checkRewrite(value);return;}
+    var r=A.answer(session,value,helped,Date.now());if(!r)return;r.seconds=Math.max(0,(Date.now()-startedAt)/1000);
+    if(session.mode==='practice'){recordResult(r);showFeedback(r,false);}else{saveDraft();nextQuestionAcademy();}
+    saveDraft();
+  }
+  function diffMarkup(word,answer){var cells=A.spellingDiff(word,answer);return '<div class="academy-spelling-line"><small>정답</small><strong>'+cells.map(function(c){return c.same?esc(c.expected):c.expected?'<mark>'+esc(c.expected)+'</mark>':'';}).join('')+'</strong></div><div class="academy-spelling-line"><small>내 답</small><strong>'+(answer?cells.map(function(c){return c.same?esc(c.actual):c.actual?'<del>'+esc(c.actual)+'</del>':'<mark>＿</mark>';}).join(''):'(빈칸)')+'</strong></div>';}
+  function showFeedback(r,isRewrite){
+    var needs=r.grade!=='correct';el('academyAnswer').disabled=true;el('academySubmit').disabled=true;el('academySkip').disabled=true;visible('academyHint',false);el('academyHintText').textContent='';
+    visible('academyFeedback',true);el('academyFeedback').classList.toggle('correct',r.correct);el('academyFeedbackTitle').textContent=isRewrite?(r.correct?'다시 쓴 철자가 맞아요.':'철자를 한 번 더 살펴봐요.'):r.grade==='correct'?'혼자 정확하게 썼어요!':r.correct?'힌트로 맞혔어요.':'틀린 부분을 확인해요.';
+    el('academySpellingDiff').innerHTML=diffMarkup(r.word.word,r.answer);
+    el('academyFeedbackNote').textContent=isRewrite&&r.correct?'방금 본 정답을 다시 쓴 연습이에요. 다른 단어 뒤에서도 기억하는지 확인해요.':needs?'정답을 확인한 뒤 가리고 단어 전체를 다시 써요.':'정답을 보지 않고 쓴 답으로 기록했어요.';
+    var canRewrite=needs&&(!isRewrite||rewriteTries<2);visible('academyRewrite',canRewrite);visible('academyCorrectionSkip',canRewrite);visible('academyNext',!canRewrite);el('academyNext').textContent=session.queue.length?'다음 단어':'결과 보기';
+    if(isRewrite&&!r.correct&&rewriteTries>=2)el('academyFeedbackNote').textContent='여기까지 연습하고 다음 단어로 넘어가요. 복습할 단어에 남겨둘게요.';
+    (canRewrite?el('academyRewrite'):el('academyNext')).focus({preventScroll:true});
+  }
+  function startRewrite(){if(!session||session.phase!=='feedback')return;rewrite=true;showQuestionAcademy(false);saveDraft();}
+  function checkRewrite(value){rewriteTries++;var correct=A.normalize(value)===A.normalize(session.current.word.word);showFeedback({word:session.current.word,answer:value,correct:correct,grade:correct?'correct':'wrong'},true);saveDraft();}
+  function paperNext(){if(!session||session.mode!=='paper'||paused||waiting||session.phase!=='answer')return;stopSound();session.responses.push({word:session.current.word,answer:'',round:0,grade:'pending',correct:false});session.phase='feedback';saveDraft();nextQuestionAcademy();}
+  function finish(){
+    stopSound();clearInterval(tick);session.done=true;session.phase='done';paused=false;waiting=false;
+    if(session.mode==='exam'&&!session.committed){session.committed=true;saveDraft();session.responses.forEach(recordResult);}
+    if(session.mode==='practice')session.committed=true;
+    showResult();if(session.committed)clearDraft();else saveDraft();changeHero();
+  }
+  function resultRows(){
+    el('academyResultList').replaceChildren();var paper=session.mode==='paper',rows=paper?(session.committed?session.responses:session.original.map(function(w){return {word:w};})):A.summary(session).firstRows;
+    rows.forEach(function(r,i){var row=document.createElement('div');row.className='academy-result-row';var number=document.createElement('span');number.textContent=(i+1)+'.';var body=document.createElement('div');body.innerHTML='<strong>'+esc(r.word.word)+'</strong><p>'+esc(r.word.definition)+'</p>';
+      if(paper&&!session.committed){var label=document.createElement('label'),check=document.createElement('input');check.type='checkbox';check.checked=(session.paperChecks||[]).includes(i);check.setAttribute('aria-label',(i+1)+'번 '+r.word.word+' 틀렸어요');check.onchange=function(){session.paperChecks=Array.from(el('academyResultList').querySelectorAll('input')).map(function(c,index){return c.checked?index:-1;}).filter(function(n){return n>=0;});saveDraft();};label.append(check,document.createTextNode('틀렸어요'));body.appendChild(label);}
+      else{var tag=document.createElement('span');tag.className='academy-result-tag'+(r.grade==='wrong'||r.grade==='assisted'?' wrong':'');tag.textContent=paper?'직접 채점 · '+(r.correct?'정답':'오답'):r.grade==='correct'?'힌트 없이 정답':r.grade==='assisted'?'힌트 사용':'오답';body.appendChild(tag);if(!paper&&r.grade!=='correct'){var answer=document.createElement('p');answer.textContent='내 답: '+(r.answer||'(빈칸)');body.appendChild(answer);}}
+      row.append(number,body);el('academyResultList').appendChild(row);
+    });
+  }
+  function showResult(){
+    showPage('result');activeResult=session;var sum=A.summary(session),paper=session.mode==='paper';el('academyResultMode').textContent=session.title+' · '+(paper?'종이에 쓰기 · 직접 채점':session.mode==='exam'?'학원 모의시험 · 자동 채점':'듣고 쓰기 연습');
+    el('academyResultTitle').textContent=paper&&!session.committed?'공책과 정답표를 비교해요.':'오늘 연습을 마쳤어요!';
+    el('academyResultSummary').textContent=paper?(session.committed?'직접 채점: '+session.responses.filter(function(r){return r.correct;}).length+' / '+session.original.length+'개 정답. 기록을 저장했어요.':'시험이 끝났어요. 틀린 번호를 표시한 뒤 저장해주세요.'):session.mode==='exam'?'힌트 없이 정확한 철자 '+sum.firstCorrect+' / '+session.original.length+'개':'첫 시도에서 힌트 없이 '+sum.firstCorrect+' / '+sum.firstRows.length+'개 정답 · 다시 쓴 교정 연습은 점수에 더하지 않아요.';
+    resultRows();visible('academyPaperMark',paper&&!session.committed);el('academyPaperReviewed').checked=false;el('academySavePaper').disabled=true;
+    var missed=paper?session.responses.filter(function(r){return r.grade==='wrong';}).map(function(r){return r.word;}):sum.missed;session.retryWords=missed;visible('academyRetryWrong',session.committed&&missed.length>0);el('academyResultNotice').textContent=paper?'직접 채점한 정답은 자동으로 철자를 확인한 정답과 구분해 보관해요.':'다음 날에도 정답을 가리고 다시 확인해요.';
+  }
+  function savePaper(){if(!session||session.mode!=='paper'||session.committed||!el('academyPaperReviewed').checked)return;session.responses=A.paperResults(session,session.paperChecks||[]);session.committed=true;saveDraft();session.responses.forEach(recordResult);clearDraft();showResult();}
+  function pauseSession(){if(!session||session.done||page!=='session')return;paused=true;stopSound();visible('academyActive',false);visible('academyWait',false);visible('academyPaused',true);saveDraft();}
+  function resumeSession(){if(!session)return;paused=false;showPage('session');ensureTick();if(session.done){showResult();return;}if(!session.current||waiting){waiting=false;nextQuestionAcademy();return;}if(session.phase==='feedback'&&!rewrite){showQuestionAcademy(true);stopSound();showFeedback(session.responses[session.responses.length-1],false);}else{showQuestionAcademy(true);}}
+  function home(){stopSound();if(session&&!session.done){paused=true;saveDraft();}if(session&&session.done&&session.committed){session=null;clearDraft();}switchTab('smart');}
+  function previewVoice(statusId){var pool=words();el(statusId).textContent='소리를 확인해 주세요…';speaker.play(pool.length?pool[0].definition:'a person who teaches students',options(),{end:function(){el(statusId).textContent='재생을 마쳤어요. 잘 들리면 시작해요.';},error:function(reason){el(statusId).textContent=JianSpeaker.errorMessage(reason);}});}
+  el('academyPractice').onclick=function(){practice('smart');};el('academyWeak').onclick=function(){practice('weak');};
+  el('academyExam').onclick=function(){if((session&&!session.done)||loadDraft()){note('하던 학습을 이어가거나 ‘새로 시작하기’를 눌러주세요.');return;}examWords=A.shuffle(words());el('academyExamScope').textContent=el('academyFolder').selectedOptions[0].textContent+' · 전체 '+examWords.length+'문제 · 순서를 섞어서 출제해요.';visible('academyExamSetup',true);el('academyExamStart').focus({preventScroll:true});};
+  el('academyExamStart').onclick=function(){var mode=document.querySelector('input[name="academyExamMode"]:checked').value;launch(mode,examWords,'학원처럼 시험 보기');};
+  el('academyFolder').onchange=function(){saveSettings();visible('academyExamSetup',false);refreshHome();};Object.keys(optionFields).forEach(function(k){el(optionFields[k]).onchange=saveSettings;});
+  el('academyPreviewVoice').onclick=function(){previewVoice('academyPreviewStatus');};el('academySoundCheck').onclick=function(){previewVoice('academySoundStatus');};
+  el('academyListen').onclick=playDefinition;el('academyAnswerForm').onsubmit=function(e){e.preventDefault();submitAnswer(false);};el('academyAnswer').oninput=saveDraft;
+  el('academySkip').onclick=function(){el('academyAnswer').value='';submitAnswer(true);};el('academyHint').onclick=function(){if(!session||session.mode!=='practice'||session.phase!=='answer')return;helped=true;el('academyHintText').textContent='첫 글자: '+session.current.word.word[0];el('academyHint').disabled=true;saveDraft();};
+  el('academyShowDefinition').onclick=function(){if(!session||session.mode!=='practice')return;el('academyDefinition').textContent=session.current.word.definition;visible('academyDefinition',true);visible('academyShowDefinition',false);};
+  el('academyRewrite').onclick=startRewrite;el('academyCorrectionSkip').onclick=nextQuestionAcademy;el('academyNext').onclick=nextQuestionAcademy;el('academyPaperNext').onclick=paperNext;el('academyPause').onclick=pauseSession;el('academyResume').onclick=resumeSession;el('academyHomeButton').onclick=home;el('academyResultHome').onclick=home;
+  el('academyPaperReviewed').onchange=function(){el('academySavePaper').disabled=!this.checked;};el('academySavePaper').onclick=savePaper;
+  el('academyRetryWrong').onclick=function(){var pool=(session.retryWords||[]).slice();session=null;clearDraft();launch('practice',pool,'틀린 단어만 연습');};
+  el('academyContinue').onclick=function(){session=session||loadDraft();if(!session){refreshHome();return;}helped=!!session.helped;rewrite=!!session.rewrite;rewriteTries=Number(session.rewriteTries)||0;waiting=!!session.waiting;resumeSession();};
+  el('academyDiscard').onclick=function(){if(!confirm('하던 학습을 새로 시작할까요? 이미 채점된 학습 기록은 남아요. 끝내지 않은 시험의 답안은 지워져요.'))return;stopSound();clearInterval(tick);session=null;clearDraft();refreshHome();note('새 학습을 시작할 수 있어요.');};
+  el('academyManage').onclick=function(){switchTab('manage');};el('academyLegacyTest').onclick=function(){switchTab('test');};el('academyLegacyFlash').onclick=function(){switchTab('flash');};el('academyLegacySmart').onclick=function(){switchTab('academy-legacy');};
+  el('academyDemo').onclick=function(){if(!IS_QA)return;data={folders:[{name:'학원 시험 예시',words:[{word:'teacher',definition:'a person who teaches students'},{word:'receive',definition:'to get something that someone gives you'},{word:'borrow',definition:'to take and use something and return it later'},{word:'library',definition:'a place where you can read or borrow books'},{word:'journey',definition:'an act of travelling from one place to another'}]}]};_origSaveData(data);populateTestFolderSelect();refreshHome();};
+  var cloud=document.querySelector('.learning-cloud');el('academyCloudSlot').appendChild(cloud);
+  document.querySelector('.tab-btn[data-tab="smart"]').textContent='학습 홈';document.querySelector('.tab-btn[data-tab="manage"]').textContent='단어장';
+  document.addEventListener('visibilitychange',function(){if(document.hidden){speaker.stop();pauseSession();}});window.addEventListener('pagehide',function(){speaker.stop();if(session&&!session.done)saveDraft();});
+  window.addEventListener('jian:records-updated',function(){if(page==='home')refreshHome();});var oldPopulateAcademy=populateTestFolderSelect;populateTestFolderSelect=function(){oldPopulateAcademy();if(page==='home')refreshHome();};
+  if(!IS_PRODUCTION){visible('academyEnvironment',true);el('academyEnvironment').innerHTML=(IS_QA?'검증용 화면 · 실제 학습 기록과 분리되어요.':'이 컴퓨터의 미리보기 화면이에요.')+' <a href="https://granbleu02-star.github.io/jian-vocab/?v=11">실제 학습 사이트 열기</a>';visible('academyDemo',IS_QA);if(IS_QA)el('academyEnvironment').appendChild(el('academyDemo'));}
+  switchTab('smart');
 })();
 
 </script>
